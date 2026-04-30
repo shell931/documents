@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análisis Recolector Anexos Preconteo</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css"
+  />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --line: #2a3554;
+      --text: #ecf2ff;
+      --muted: #8ea0c0;
+      --accent: #5c7cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0e1528 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 20px auto 28px;
+      padding: 0 14px;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .title {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background: var(--accent);
+      border: 1px solid #4f6df0;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: #1a274f;
+      border-color: var(--line);
+    }
+
+    .article {
+      background: #fff;
+      color: #24292f;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .article.markdown-body {
+      background: #fff;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <p class="title">Documento renderizado en HTML (lectura amigable)</p>
+      <div class="actions">
+        <a class="btn secondary" href="../index.html">Volver al inicio</a>
+        <a class="btn" href="./analisis-recolector-anexos-preconteo.md">Ver .md original</a>
+      </div>
+    </header>
+
+    <article id="content" class="article markdown-body">
+      Cargando documento...
+    </article>
+    <p id="status" class="status"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script>
+    (async () => {
+      const content = document.getElementById("content");
+      const status = document.getElementById("status");
+      const mdPath = "./analisis-recolector-anexos-preconteo.md";
+
+      try {
+        const resp = await fetch(mdPath, { cache: "no-store" });
+        if (!resp.ok) {
+          throw new Error("No se pudo cargar el Markdown.");
+        }
+
+        const markdown = await resp.text();
+        marked.setOptions({
+          mangle: false,
+          headerIds: true,
+          breaks: false
+        });
+        content.innerHTML = marked.parse(markdown);
+        status.textContent = "Fuente: " + mdPath;
+      } catch (err) {
+        content.textContent = "Error al renderizar el documento.";
+        status.textContent = err.message;
+      }
+    })();
+  </script>
+</body>
+</html>
