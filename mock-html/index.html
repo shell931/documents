@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Recolector Anexos Preconteo</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --muted: #8ea0c0;
+      --text: #ecf2ff;
+      --line: #2a3554;
+      --ok: #1dbf73;
+      --warn: #f4b400;
+      --bad: #ff5c7a;
+      --accent: #5c7cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0e1528 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
+    .title { margin: 0 0 8px; font-size: 24px; }
+    .subtitle { margin: 0 0 20px; color: var(--muted); }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: #111936;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tab.active { border-color: var(--accent); background: #18244a; }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      background: #121c38;
+    }
+    .pill.ok { color: #b6ffd8; border-color: #1e7a55; }
+    .pill.warn { color: #ffeab0; border-color: #826b1e; }
+    .pill.bad { color: #ffc4d1; border-color: #813244; }
+    .spacer { flex: 1; }
+    button {
+      border: 1px solid var(--line);
+      background: #1a274f;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: #4f6df0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      padding: 10px 8px;
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-weight: 600; }
+    .hidden { display: none; }
+    input, select, textarea {
+      border: 1px solid var(--line);
+      background: #0f1730;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    textarea { width: 100%; min-height: 80px; }
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .kpi .card { margin: 0; }
+    .small { font-size: 12px; color: var(--muted); }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 8, 20, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(760px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .modal h3 { margin-top: 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="title">Mock básico — Recolector de Anexos Preconteo</h1>
+    <p class="subtitle">Prototipo HTML estático para visualizar módulos: dashboard, detalle, revisión, exportación y configuración.</p>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="dashboard">1) Dashboard</button>
+      <button class="tab" data-tab="detalle">2) Detalle Anexo</button>
+      <button class="tab" data-tab="revision">3) Revisión</button>
+      <button class="tab" data-tab="exportacion">4) Exportación</button>
+      <button class="tab" data-tab="informe">5) Informe PDF</button>
+      <button class="tab" data-tab="config">6) Configuración</button>
+    </div>
+
+    <section id="dashboard" class="view">
+      <div class="kpi">
+        <div class="card"><div class="small">Anexos cerrados</div><h3>32 / 70</h3></div>
+        <div class="card"><div class="small">En revisión</div><h3>8</h3></div>
+        <div class="card"><div class="small">En construcción</div><h3>20</h3></div>
+        <div class="card"><div class="small">Pendientes</div><h3>10</h3></div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <select><option>Evento: Simulacro I</option><option>Simulacro II</option><option>Día electoral</option></select>
+          <select><option>Estado: Todos</option><option>Cerrado</option><option>Revisión</option><option>En construcción</option></select>
+          <input placeholder="Buscar anexo..." />
+          <div class="spacer"></div>
+          <button class="primary">Exportar paquete 01..70</button>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td></tr>
+            <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td></tr>
+            <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td></tr>
+            <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="detalle" class="view hidden">
+      <div class="card">
+        <div class="row">
+          <h3 style="margin:0;">Anexo 28 — Entregables prueba Casa Matriz</h3>
+          <span class="pill">En construcción</span>
+          <div class="spacer"></div>
+          <button id="btn-send-anexo-review">Enviar anexo a revisión</button>
+          <span id="anexo-review-status" class="pill hidden">Anexo enviado a revisión</span>
+        </div>
+        <p class="small">Sede: Casa Matriz · Evento: Prueba Casa Matriz</p>
+      </div>
+      <div class="card">
+        <h4>Ficha del anexo (nivel 1: descripción general)</h4>
+        <p class="small">Esta descripción es del catálogo del anexo (aplica siempre, no por archivo).</p>
+        <textarea id="catalog-description" disabled>Anexo 28 destinado a almacenar entregables de la prueba de Casa Matriz: MMV, boletines, imágenes FRT, logs y estados de comunicaciones según lineamientos.</textarea>
+        <div class="row" style="margin-top:10px;">
+          <button>Ver historial de ficha</button>
+          <button id="btn-open-request-modal">Solicitar ajuste a administrador</button>
+          <span id="catalog-request-status" class="pill hidden">Pendiente aprobación admin</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Checklist operativo</h4>
+        <div class="row">
+          <label><input type="checkbox" checked /> MMV</label>
+          <label><input type="checkbox" checked /> Boletines</label>
+          <label><input type="checkbox" /> Imágenes FRT</label>
+          <label><input type="checkbox" checked /> Logs comunicaciones</label>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Archivos cargados</h4>
+        <table>
+          <thead><tr><th>Archivo</th><th>Descripción evidencia (nivel 2)</th><th>Subido por</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>boletin_preconteo_v3.pdf</td>
+              <td>Boletín consolidado de preconteo, corte 14:20 Casa Matriz.</td>
+              <td>jrocha</td>
+              <td>2026-02-11 14:22</td>
+              <td><button class="btn-view-file" data-file="boletin_preconteo_v3.pdf" data-desc="Boletín consolidado de preconteo, corte 14:20 Casa Matriz.">Ver</button></td>
+            </tr>
+            <tr>
+              <td>consolidado_mmv_01.mmv</td>
+              <td>Archivo MMV de consolidación prueba Casa Matriz.</td>
+              <td>acastro</td>
+              <td>2026-02-11 14:31</td>
+              <td><button class="btn-view-file" data-file="consolidado_mmv_01.mmv" data-desc="Archivo MMV de consolidación prueba Casa Matriz.">Ver</button></td>
+            </tr>
+            <tr>
+              <td>log_telefonia_crt.zip</td>
+              <td>Logs de telefonía del CRT durante ventana de prueba.</td>
+              <td>acastro</td>
+              <td>2026-02-11 14:45</td>
+              <td><button class="btn-view-file" data-file="log_telefonia_crt.zip" data-desc="Logs de telefonía del CRT durante ventana de prueba.">Ver</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row" style="margin-top:10px;">
+          <button id="btn-open-upload" class="primary">Subir archivos</button>
+          <button>Agregar nota interna</button>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <input style="min-width:320px;" placeholder="Descripción de evidencia (nivel 2): p.ej. Lista asistencia Bogotá jornada 2" />
+          <button>Guardar descripción de evidencia</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="revision" class="view hidden">
+      <div class="card">
+        <h3>Cola de revisión</h3>
+        <table>
+          <thead><tr><th>Anexo</th><th>Sede</th><th>Evento</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>02</td><td>CRT Antioquia</td><td>Simulacro I</td><td>coord.crt</td><td>2026-02-12 09:10</td><td><button>Revisar</button></td></tr>
+            <tr><td>28</td><td>Casa Matriz</td><td>Prueba matriz</td><td>lider.pruebas</td><td>2026-02-12 09:44</td><td><button>Revisar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Decisión de revisión (mock)</h4>
+        <textarea placeholder="Observaciones del revisor..."></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button class="primary">Aprobar anexo</button>
+          <button>Devolver con observaciones</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="exportacion" class="view hidden">
+      <div class="card">
+        <h3>Exportar paquete de entrega</h3>
+        <div class="row">
+          <select><option>Alcance: Todo el proyecto</option><option>Evento específico</option></select>
+          <div class="spacer"></div>
+          <button class="primary">Generar ZIP</button>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Validaciones previas</h4>
+        <ul>
+          <li><span class="pill ok">OK</span> Estructura 01..70 completa</li>
+          <li><span class="pill ok">OK</span> Nombres de carpeta oficiales</li>
+          <li><span class="pill ok">OK</span> Anexos cerrados incluidos</li>
+          <li><span class="pill warn">Atención</span> 5 anexos siguen en "En construcción"</li>
+        </ul>
+        <p class="small">Salida esperada: <b>Anexos_Preconteo_Congreso_2026-02-12.zip</b></p>
+      </div>
+    </section>
+
+    <section id="config" class="view hidden">
+      <div class="card">
+        <h3>Configuración mínima</h3>
+        <table>
+          <thead><tr><th>Parámetro</th><th>Valor</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>Catálogo de anexos (70)</td><td>Bloqueado por defecto</td><td><button>Ver</button></td></tr>
+            <tr><td>Checklist por anexo</td><td>Editable</td><td><button>Editar</button></td></tr>
+            <tr><td>Estados de flujo</td><td>pendiente / construcción / revisión / cerrado</td><td><button>Editar</button></td></tr>
+            <tr><td>Roles</td><td>cargador / revisor / admin</td><td><button>Editar</button></td></tr>
+            <tr><td>Reglas exportación</td><td>Solo cerrados (default)</td><td><button>Editar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Reglas documentales (3 niveles)</h4>
+        <table>
+          <thead><tr><th>Nivel</th><th>Qué se configura</th><th>Dónde se usa</th></tr></thead>
+          <tbody>
+            <tr><td>1. Descripción general del anexo</td><td>Ficha del catálogo por anexo (texto guía)</td><td>Detalle de anexo (bloque “Ficha del anexo”)</td></tr>
+            <tr><td>2. Descripción de evidencia</td><td>Campo obligatorio por archivo o lote subido</td><td>Carga de evidencias del anexo</td></tr>
+            <tr><td>3. Texto narrativo del informe</td><td>Plantillas por sección y validación “Ver Anexo XX”</td><td>Módulo Informe PDF</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="informe" class="view hidden">
+      <div class="card">
+        <div class="row">
+          <h3 style="margin:0;">Constructor Informe Cap. VIII</h3>
+          <span class="pill warn">Borrador v0.9</span>
+          <div class="spacer"></div>
+          <button>Guardar borrador</button>
+          <button id="btn-send-section-review">Enviar sección a revisión</button>
+          <span id="section-review-status" class="pill hidden">Sección enviada a revisión</span>
+          <button class="primary">Exportar PDF Cap. VIII</button>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Relación sección ↔ anexos (ejemplo)</h4>
+        <table>
+          <thead><tr><th>Sección</th><th>Anexos vinculados</th><th>Estado evidencias</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>6. CAPACITACIÓN</td>
+              <td>05, 06, 07, 23, 24</td>
+              <td><span class="pill warn">4/5 completos</span></td>
+            </tr>
+            <tr>
+              <td>11. ENTREGABLES</td>
+              <td>20, 21, 28, 30, 34, 38, 40, 43, ...</td>
+              <td><span class="pill ok">Completando</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small">Una sección del informe puede referenciar varios anexos, y un mismo anexo puede aparecer en más de una sección si el relato lo requiere.</p>
+      </div>
+      <div class="card">
+        <h4>Progreso por secciones</h4>
+        <div class="row">
+          <span class="pill ok">1 Alcance</span>
+          <span class="pill ok">2 Funcionalidades</span>
+          <span class="pill warn">3 Comunicaciones</span>
+          <span class="pill warn">6 Capacitación</span>
+          <span class="pill ok">10 Auditorías</span>
+          <span class="pill warn">11 Entregables</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Editor de sección — 6. CAPACITACIÓN</h4>
+        <textarea>La UT ILE 2026 garantizó las siguientes actividades:
+
+1. Planificó, diseñó e implementó un plan de capacitación... Ver Anexo 05.
+2. Impartió capacitación sobre el proceso... Ver Anexo 23.
+3. Impartió capacitación al personal RNEC... Ver Anexo 24.
+5. Se entregó kit didáctico... Ver Anexo 07.</textarea>
+      </div>
+      <div class="card">
+        <h4>Validación de referencias “Ver Anexo XX”</h4>
+        <table>
+          <thead><tr><th>Referencia</th><th>Estado</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>Ver Anexo 05</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
+            <tr><td>Ver Anexo 23</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
+            <tr><td>Ver Anexo 24</td><td><span class="pill warn">Alerta</span></td><td>Sin archivo aprobado</td></tr>
+            <tr><td>Ver Anexo 07</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="file-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="row">
+        <h3 style="margin:0;">Detalle de evidencia</h3>
+        <div class="spacer"></div>
+        <button id="btn-close-file-modal">Cerrar</button>
+      </div>
+      <p class="small">Archivo seleccionado</p>
+      <input id="file-name" disabled style="width:100%; margin-bottom:10px;" />
+      <p class="small">Descripción de evidencia (nivel 2)</p>
+      <textarea id="file-description"></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button class="primary">Guardar descripción</button>
+        <button>Aprobar evidencia</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="upload-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="row">
+        <h3 style="margin:0;">Subir evidencia</h3>
+        <div class="spacer"></div>
+        <button id="btn-close-upload-modal">Cerrar</button>
+      </div>
+      <p class="small">Archivo</p>
+      <input type="file" style="width:100%; margin-bottom:10px;" />
+      <p class="small">Descripción de evidencia (obligatoria)</p>
+      <textarea id="upload-description" placeholder="Describe qué evidencia contiene este archivo..."></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button id="btn-upload-save" class="primary">Subir y guardar</button>
+      </div>
+      <p id="upload-error" class="small" style="color:#ff9fb3; display:none;">La descripción de evidencia es obligatoria.</p>
+    </div>
+  </div>
+
+  <div id="request-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="row">
+        <h3 style="margin:0;">Solicitar ajuste de ficha de anexo</h3>
+        <div class="spacer"></div>
+        <button id="btn-close-request-modal">Cerrar</button>
+      </div>
+      <p class="small">La descripción de catálogo es de solo lectura para este rol. Envía solicitud al administrador documental.</p>
+      <p class="small">Descripción actual</p>
+      <textarea disabled>Anexo 28 destinado a almacenar entregables de la prueba de Casa Matriz: MMV, boletines, imágenes FRT, logs y estados de comunicaciones según lineamientos.</textarea>
+      <p class="small">Propuesta de ajuste</p>
+      <textarea id="request-proposal" placeholder="Propón el texto ajustado para la ficha del anexo..."></textarea>
+      <p class="small">Justificación</p>
+      <textarea id="request-reason" placeholder="Explica por qué debe modificarse (lineamiento, oficio, cambio operativo, etc.)"></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button id="btn-send-request" class="primary">Enviar solicitud</button>
+      </div>
+      <p id="request-error" class="small" style="color:#ff9fb3; display:none;">Debes completar propuesta y justificación.</p>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const views = document.querySelectorAll(".view");
+    tabs.forEach((t) => {
+      t.addEventListener("click", () => {
+        tabs.forEach((x) => x.classList.remove("active"));
+        views.forEach((v) => v.classList.add("hidden"));
+        t.classList.add("active");
+        document.getElementById(t.dataset.tab).classList.remove("hidden");
+      });
+    });
+
+    const fileModal = document.getElementById("file-modal");
+    const uploadModal = document.getElementById("upload-modal");
+    const fileNameInput = document.getElementById("file-name");
+    const fileDescInput = document.getElementById("file-description");
+
+    document.querySelectorAll(".btn-view-file").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        fileNameInput.value = btn.dataset.file || "";
+        fileDescInput.value = btn.dataset.desc || "";
+        fileModal.classList.add("open");
+      });
+    });
+
+    document.getElementById("btn-close-file-modal").addEventListener("click", () => {
+      fileModal.classList.remove("open");
+    });
+
+    document.getElementById("btn-open-upload").addEventListener("click", () => {
+      uploadModal.classList.add("open");
+    });
+
+    document.getElementById("btn-close-upload-modal").addEventListener("click", () => {
+      uploadModal.classList.remove("open");
+    });
+
+    document.getElementById("btn-upload-save").addEventListener("click", () => {
+      const desc = document.getElementById("upload-description").value.trim();
+      const err = document.getElementById("upload-error");
+      if (!desc) {
+        err.style.display = "block";
+        return;
+      }
+      err.style.display = "none";
+      uploadModal.classList.remove("open");
+      alert("Mock: evidencia subida con descripción.");
+    });
+
+    const requestModal = document.getElementById("request-modal");
+    const requestStatus = document.getElementById("catalog-request-status");
+
+    document.getElementById("btn-open-request-modal").addEventListener("click", () => {
+      requestModal.classList.add("open");
+    });
+
+    document.getElementById("btn-close-request-modal").addEventListener("click", () => {
+      requestModal.classList.remove("open");
+    });
+
+    document.getElementById("btn-send-request").addEventListener("click", () => {
+      const proposal = document.getElementById("request-proposal").value.trim();
+      const reason = document.getElementById("request-reason").value.trim();
+      const err = document.getElementById("request-error");
+      if (!proposal || !reason) {
+        err.style.display = "block";
+        return;
+      }
+      err.style.display = "none";
+      requestModal.classList.remove("open");
+      requestStatus.classList.remove("hidden");
+      alert("Mock: solicitud enviada al administrador documental.");
+    });
+
+    document.getElementById("btn-send-anexo-review").addEventListener("click", () => {
+      document.getElementById("anexo-review-status").classList.remove("hidden");
+      alert("Mock: anexo enviado a revisión.");
+    });
+
+    document.getElementById("btn-send-section-review").addEventListener("click", () => {
+      document.getElementById("section-review-status").classList.remove("hidden");
+      alert("Mock: sección del informe enviada a revisión.");
+    });
+  </script>
+</body>
+</html>

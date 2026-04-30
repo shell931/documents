@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Collector - GitHub Pages</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --line: #2a3554;
+      --text: #ecf2ff;
+      --muted: #8ea0c0;
+      --accent: #5c7cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0e1528 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 980px; margin: 36px auto; padding: 0 16px; }
+    h1 { margin-bottom: 8px; }
+    .sub { color: var(--muted); margin-bottom: 20px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .card h2 { font-size: 18px; margin-top: 0; }
+    .card p { color: var(--muted); min-height: 48px; }
+    a.btn {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background: var(--accent);
+      border: 1px solid #4f6df0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .tip {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--muted);
+      background: #101a35;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Report Collector</h1>
+    <p class="sub">Publicación de documento y mock funcional para GitHub Pages.</p>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Mock funcional HTML</h2>
+        <p>Interfaz interactiva del recolector de anexos, con tabs y validaciones del prototipo.</p>
+        <a class="btn" href="./mock-html/index.html">Abrir mock</a>
+      </article>
+
+      <article class="card">
+        <h2>Documento Markdown</h2>
+        <p>Documento de análisis en formato original Markdown, tal cual para consulta.</p>
+        <a class="btn" href="./docs/analisis-recolector-anexos-preconteo.md">Abrir documento</a>
+      </article>
+    </section>
+
+    <p class="tip">
+      Si publicas en GitHub Pages desde la rama <strong>main</strong> y carpeta <strong>/ (root)</strong>,
+      esta URL será la portada del sitio y desde aquí accedes a ambos recursos.
+    </p>
+  </main>
+</body>
+</html>
