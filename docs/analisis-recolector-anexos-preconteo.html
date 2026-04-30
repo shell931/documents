@@ -6,11 +6,12 @@
   <title>Análisis Recolector Anexos Preconteo</title>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown.min.css"
+    href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown-light.min.css"
+    integrity="sha384-WegiJwEO7NiHZcXx+w3sV5VC3EjMH2K20a9/TMCIBqm5x0p0BaIFxs+EQ2fNWz0R"
+    crossorigin="anonymous"
   />
   <style>
     :root {
-      color-scheme: dark;
       --bg: #0b1020;
       --panel: #121a2f;
       --line: #2a3554;
@@ -78,16 +79,19 @@
       border-color: var(--line);
     }
 
-    .article {
+    .article-shell {
       background: #fff;
-      color: #24292f;
       border-radius: 12px;
       border: 1px solid var(--line);
-      padding: 20px;
-      overflow-x: auto;
+      overflow: hidden;
     }
 
     .article.markdown-body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 28px;
       background: #fff;
     }
 
@@ -95,6 +99,11 @@
       color: var(--muted);
       font-size: 13px;
       margin-top: 10px;
+    }
+    @media (max-width: 767px) {
+      .article.markdown-body {
+        padding: 18px 14px;
+      }
     }
   </style>
 </head>
@@ -108,13 +117,19 @@
       </div>
     </header>
 
-    <article id="content" class="article markdown-body">
-      Cargando documento...
-    </article>
+    <section class="article-shell">
+      <article id="content" class="article markdown-body">
+        Cargando documento...
+      </article>
+    </section>
     <p id="status" class="status"></p>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"
+    integrity="sha384-/TQbtLCAerC3jgaim+N78RZSDYV7ryeoBCVqTuzRrFec2akfBkHS7ACQ3PQhvMVi"
+    crossorigin="anonymous"
+  ></script>
   <script>
     (async () => {
       const content = document.getElementById("content");
@@ -129,6 +144,8 @@
 
         const markdown = await resp.text();
         marked.setOptions({
+          gfm: true,
+          tables: true,
           mangle: false,
           headerIds: true,
           breaks: false
