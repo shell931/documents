@@ -29,20 +29,45 @@
 
     .tabs {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
       margin-bottom: 16px;
     }
     .tab {
       border: 1px solid var(--line);
       background: #111936;
       color: var(--text);
-      padding: 10px 12px;
+      padding: 10px 8px;
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 12px;
     }
     .tab.active { border-color: var(--accent); background: #18244a; }
+    /* Pestaña Revisión (rol revisor) — tono cobre / ámbar */
+    .tab.tab-revisor {
+      background: linear-gradient(180deg, #2a1e16 0%, #181210 100%);
+      border-color: #8b5535;
+      color: #f0c9a8;
+    }
+    .tab.tab-revisor.active {
+      border-color: #e4a048;
+      background: linear-gradient(180deg, #3d2a1c 0%, #241a12 100%);
+      color: #ffebd6;
+      box-shadow: 0 0 0 1px rgba(228, 160, 72, 0.35);
+    }
+    /* Pestaña Configuración (rol admin) — tono verde */
+    .tab.tab-admin {
+      background: linear-gradient(180deg, #173225 0%, #11221a 100%);
+      border-color: #2f8a62;
+      color: #c9f5df;
+    }
+    .tab.tab-admin.active {
+      border-color: #43bf85;
+      background: linear-gradient(180deg, #1f4835 0%, #162b21 100%);
+      color: #ebfff5;
+      box-shadow: 0 0 0 1px rgba(67, 191, 133, 0.35);
+    }
 
     .card {
       background: var(--panel);
@@ -122,20 +147,86 @@
       padding: 16px;
     }
     .modal h3 { margin-top: 0; }
+    /* Índice Cap. VIII (Contenido del PDF) — progreso por sección */
+    .toc-scroll {
+      max-height: 440px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-top: 10px;
+      background: #0d1428;
+    }
+    .toc-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .toc-row:last-child { border-bottom: none; }
+    .toc-row.sub {
+      padding-left: 22px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .toc-row.main .toc-label { font-weight: 600; color: var(--text); }
+    .toc-label { line-height: 1.35; }
+    .toc-page { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    /* Menú Anexos (pestaña 2) */
+    .anexos-layout {
+      display: grid;
+      grid-template-columns: minmax(200px, 240px) 1fr;
+      gap: 16px;
+      margin-top: 12px;
+      align-items: start;
+    }
+    .anexos-menu {
+      border-right: 1px solid var(--line);
+      padding-right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .anexo-menu-btn {
+      text-align: left;
+      font-size: 12px;
+      background: #141f3d;
+    }
+    .anexo-menu-btn.active {
+      border-color: var(--accent);
+      background: #18244a;
+    }
+    .anexos-panel { min-width: 0; }
+    #revision .revision-card-accent {
+      border-left: 4px solid #c4783a;
+      background: linear-gradient(90deg, rgba(196, 120, 58, 0.12) 0%, var(--panel) 14%);
+    }
+    .accent-revisor { color: #e4a048; }
+    #config .config-card-accent {
+      border-left: 4px solid #3da875;
+      background: linear-gradient(90deg, rgba(61, 168, 117, 0.12) 0%, var(--panel) 14%);
+    }
+    @media (max-width: 760px) {
+      .anexos-layout { grid-template-columns: 1fr; }
+      .anexos-menu { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1 class="title">Mock básico — Recolector de Anexos Preconteo</h1>
-    <p class="subtitle">Prototipo HTML estático para visualizar módulos: dashboard, detalle, revisión, exportación y configuración.</p>
+    <p class="subtitle"></p>
 
     <div class="tabs">
       <button class="tab active" data-tab="dashboard">1) Dashboard</button>
-      <button class="tab" data-tab="detalle">2) Detalle Anexo</button>
-      <button class="tab" data-tab="revision">3) Revisión</button>
-      <button class="tab" data-tab="exportacion">4) Exportación</button>
+      <button class="tab" data-tab="anexos">2) Anexos</button>
+      <button class="tab" data-tab="redaccion">3) Redacción informe</button>
+      <button class="tab" data-tab="exportacion">4) Exportación Zip</button>
       <button class="tab" data-tab="informe">5) Informe PDF</button>
-      <button class="tab" data-tab="config">6) Configuración</button>
+      <button class="tab tab-revisor" data-tab="revision">6) Revisión</button>
+      <button class="tab tab-admin" data-tab="config">7) Configuración</button>
     </div>
 
     <section id="dashboard" class="view">
@@ -154,19 +245,70 @@
           <button class="primary">Exportar paquete 01..70</button>
         </div>
         <table>
-          <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th></tr></thead>
+          <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th><th>Acción</th></tr></thead>
           <tbody>
-            <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td></tr>
-            <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td></tr>
-            <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td></tr>
-            <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td></tr>
+            <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+            <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+            <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+            <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
           </tbody>
         </table>
+        <p class="small">No hay pestaña «detalle»: <strong>Abrir</strong> abre ficha y evidencias. El listado completo con menú lateral está en <strong>2) Anexos</strong>. Mock: todas las filas abren el ejemplo Anexo 28.</p>
+      </div>
+    </section>
+
+    <section id="anexos" class="view hidden">
+      <div class="card">
+        <h3 style="margin-top:0;">Menú de anexos — catálogo 01–70</h3>
+        <p class="small">Vista dedicada al listado operativo del paquete Preconteo Congreso. El menú izquierdo agrupa filtros rápidos (mock); la tabla replica el criterio del Dashboard con más filas de ejemplo.</p>
+        <div class="anexos-layout">
+          <nav class="anexos-menu" aria-label="Menú de anexos">
+            <div class="small" style="margin-bottom:4px;">Alcance</div>
+            <button type="button" class="anexo-menu-btn active" data-menu-mock>Todos (01–70)</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Solo construcción / pendiente</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>En revisión</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Cerrados</button>
+            <div class="small" style="margin:14px 0 4px;">Bloques temáticos (mock)</div>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Actas y verificación CRT</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Simulacros y Casa Matriz</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Infraestructura y Data Center</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Entregables día electoral</button>
+            <button type="button" class="anexo-menu-btn" data-menu-mock>Consulados / preconteo exterior</button>
+          </nav>
+          <div class="anexos-panel">
+            <div class="row">
+              <select><option>Evento: Todos</option><option>Simulacro I</option><option>Simulacro II</option><option>Prueba Casa Matriz</option><option>Día electoral</option></select>
+              <select><option>Estado: Todos</option><option>Cerrado</option><option>Revisión</option><option>En construcción</option><option>Pendiente</option></select>
+              <input placeholder="Buscar por # o nombre..." style="min-width:200px;" />
+              <div class="spacer"></div>
+              <span class="pill">Mostrando 8 de 70 · mock</span>
+            </div>
+            <table>
+              <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th><th>Acción</th></tr></thead>
+              <tbody>
+                <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>05</td><td>Plan de capacitación y cronograma</td><td><span class="pill ok">Cerrado</span></td><td>4</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>07</td><td>Kit didáctico y material de apoyo</td><td><span class="pill">En construcción</span></td><td>1</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>22</td><td>Certificación del Datacenter</td><td><span class="pill ok">Cerrado</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>37</td><td>Acta Simulacro Preconteo I</td><td><span class="pill ok">Cerrado</span></td><td>5</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+                <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
+              </tbody>
+            </table>
+            <p class="small">Los ítems del menú lateral no filtran la tabla en este mock; solo muestran el patrón de navegación previsto.</p>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="detalle" class="view hidden">
       <div class="card">
+        <div class="row" style="margin-bottom:10px;">
+          <button type="button" id="btn-detalle-volver-dashboard">← Volver al Dashboard</button>
+          <button type="button" id="btn-detalle-volver-anexos">← Volver a Anexos</button>
+          <button type="button" id="btn-detalle-volver-revision">← Volver a Revisión</button>
+        </div>
         <div class="row">
           <h3 style="margin:0;">Anexo 28 — Entregables prueba Casa Matriz</h3>
           <span class="pill">En construcción</span>
@@ -234,27 +376,6 @@
       </div>
     </section>
 
-    <section id="revision" class="view hidden">
-      <div class="card">
-        <h3>Cola de revisión</h3>
-        <table>
-          <thead><tr><th>Anexo</th><th>Sede</th><th>Evento</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
-          <tbody>
-            <tr><td>02</td><td>CRT Antioquia</td><td>Simulacro I</td><td>coord.crt</td><td>2026-02-12 09:10</td><td><button>Revisar</button></td></tr>
-            <tr><td>28</td><td>Casa Matriz</td><td>Prueba matriz</td><td>lider.pruebas</td><td>2026-02-12 09:44</td><td><button>Revisar</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h4>Decisión de revisión (mock)</h4>
-        <textarea placeholder="Observaciones del revisor..."></textarea>
-        <div class="row" style="margin-top:10px;">
-          <button class="primary">Aprobar anexo</button>
-          <button>Devolver con observaciones</button>
-        </div>
-      </div>
-    </section>
-
     <section id="exportacion" class="view hidden">
       <div class="card">
         <h3>Exportar paquete de entrega</h3>
@@ -277,7 +398,7 @@
     </section>
 
     <section id="config" class="view hidden">
-      <div class="card">
+      <div class="card config-card-accent">
         <h3>Configuración mínima</h3>
         <table>
           <thead><tr><th>Parámetro</th><th>Valor</th><th>Acción</th></tr></thead>
@@ -290,14 +411,14 @@
           </tbody>
         </table>
       </div>
-      <div class="card">
+      <div class="card config-card-accent">
         <h4>Reglas documentales (3 niveles)</h4>
         <table>
           <thead><tr><th>Nivel</th><th>Qué se configura</th><th>Dónde se usa</th></tr></thead>
           <tbody>
-            <tr><td>1. Descripción general del anexo</td><td>Ficha del catálogo por anexo (texto guía)</td><td>Detalle de anexo (bloque “Ficha del anexo”)</td></tr>
-            <tr><td>2. Descripción de evidencia</td><td>Campo obligatorio por archivo o lote subido</td><td>Carga de evidencias del anexo</td></tr>
-            <tr><td>3. Texto narrativo del informe</td><td>Plantillas por sección y validación “Ver Anexo XX”</td><td>Módulo Informe PDF</td></tr>
+            <tr><td>1. Descripción general del anexo</td><td>Ficha del catálogo por anexo (texto guía)</td><td>Vista detalle (Abrir / Revisar; listados en 1) Dashboard y 2) Anexos)</td></tr>
+            <tr><td>2. Descripción de evidencia</td><td>Campo obligatorio por archivo o lote subido</td><td>Vista detalle (desde Abrir en 1) o 2))</td></tr>
+            <tr><td>3. Texto narrativo del informe</td><td>Plantillas por sección; citas «Ver Anexo XX» validadas contra evidencias</td><td>3) Redacción (texto) · 5) Informe PDF (resumen + validación) · 6) Revisión (rol revisor)</td></tr>
           </tbody>
         </table>
       </div>
@@ -306,14 +427,13 @@
     <section id="informe" class="view hidden">
       <div class="card">
         <div class="row">
-          <h3 style="margin:0;">Constructor Informe Cap. VIII</h3>
+          <h3 style="margin:0;">Informe PDF — resumen de armado (Cap. VIII)</h3>
           <span class="pill warn">Borrador v0.9</span>
           <div class="spacer"></div>
-          <button>Guardar borrador</button>
-          <button id="btn-send-section-review">Enviar sección a revisión</button>
-          <span id="section-review-status" class="pill hidden">Sección enviada a revisión</span>
-          <button class="primary">Exportar PDF Cap. VIII</button>
+          <button type="button" id="btn-go-redaccion" class="primary">Ir a redactar sección</button>
+          <button type="button" class="primary">Exportar PDF Cap. VIII</button>
         </div>
+        <p class="small" style="margin:12px 0 0;">Esta pestaña concentra <strong>cómo va el armado</strong>: relación sección ↔ anexos, validación de citas <strong>Ver Anexo XX</strong> frente a evidencias, índice del capítulo con estado por apartado y exportación final. El texto narrativo y borrador / envío a revisión por sección están en <strong>3) Redacción informe</strong>.</p>
       </div>
       <div class="card">
         <h4>Relación sección ↔ anexos (ejemplo)</h4>
@@ -335,27 +455,8 @@
         <p class="small">Una sección del informe puede referenciar varios anexos, y un mismo anexo puede aparecer en más de una sección si el relato lo requiere.</p>
       </div>
       <div class="card">
-        <h4>Progreso por secciones</h4>
-        <div class="row">
-          <span class="pill ok">1 Alcance</span>
-          <span class="pill ok">2 Funcionalidades</span>
-          <span class="pill warn">3 Comunicaciones</span>
-          <span class="pill warn">6 Capacitación</span>
-          <span class="pill ok">10 Auditorías</span>
-          <span class="pill warn">11 Entregables</span>
-        </div>
-      </div>
-      <div class="card">
-        <h4>Editor de sección — 6. CAPACITACIÓN</h4>
-        <textarea>La UT ILE 2026 garantizó las siguientes actividades:
-
-1. Planificó, diseñó e implementó un plan de capacitación... Ver Anexo 05.
-2. Impartió capacitación sobre el proceso... Ver Anexo 23.
-3. Impartió capacitación al personal RNEC... Ver Anexo 24.
-5. Se entregó kit didáctico... Ver Anexo 07.</textarea>
-      </div>
-      <div class="card">
         <h4>Validación de referencias “Ver Anexo XX”</h4>
+        <p class="small">Avance del cruce entre las citas del borrador y el estado de evidencias en el recolector (mock: fijo para <strong>6. CAPACITACIÓN</strong>; el texto fuente se edita en <strong>3) Redacción informe</strong>).</p>
         <table>
           <thead><tr><th>Referencia</th><th>Estado</th><th>Detalle</th></tr></thead>
           <tbody>
@@ -365,6 +466,115 @@
             <tr><td>Ver Anexo 07</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
           </tbody>
         </table>
+      </div>
+      <div class="card">
+        <h4>Progreso por secciones</h4>
+        <p class="small">Estructura alineada al <strong>Contenido</strong> de <em>Congreso Inf. Cap. VIII — Preconteo — Comunicaciones</em> (índice págs. 2–3 del PDF). El estado resume evidencias vinculadas y borrador por apartado; la edición del texto y el envío a revisión por sección se hacen en <strong>3) Redacción informe</strong>. Las citas «Ver Anexo» se validan en el bloque anterior.</p>
+        <div class="toc-scroll" aria-label="Índice del informe Capítulo VIII">
+          <div class="toc-row main"><span class="toc-label">DESCRIPCIÓN DEL SERVICIO</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.4</span></span></div>
+          <div class="toc-row main"><span class="toc-label">1. ALCANCE</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.4</span></span></div>
+          <div class="toc-row main"><span class="toc-label">2. FUNCIONALIDADES DE LA SOLUCIÓN INFORMÁTICA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.9</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">a) En los puestos de votación</span><span><span class="pill ok">OK</span> <span class="toc-page">p.9</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">b) En los Centros de Recepción Telefónica (CRT)</span><span><span class="pill ok">OK</span> <span class="toc-page">p.10</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">c) En el Data Center</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.11</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">d) En el Centro de Control</span><span><span class="pill ok">OK</span> <span class="toc-page">p.13</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">e) En las oficinas de seguimiento departamental</span><span><span class="pill ok">OK</span> <span class="toc-page">p.14</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">f) Diagrama General</span><span><span class="pill ok">OK</span> <span class="toc-page">p.14</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">g) Software — Procesamiento de Datos Electorales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.16</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">h) Software — Digitalización, interpretación y verificación</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.30</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">i) Software de Preconteo para Consulados</span><span><span class="pill ok">OK</span> <span class="toc-page">p.34</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">j) Continuidad del Procesamiento de Datos</span><span><span class="pill ok">OK</span> <span class="toc-page">p.38</span></span></div>
+          <div class="toc-row main"><span class="toc-label">3. PLAN DE COMUNICACIONES PARA EL PROCESO DE PRECONTEO</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.39</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">a) Elementos de comunicaciones administrativos transversales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.48</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">b) Plan de Comunicaciones Proceso de Preconteo Electoral</span><span><span class="pill ok">OK</span> <span class="toc-page">p.54</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">c) Red de Datos Electoral Preconteo</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.74</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">d) Canales de Internet</span><span><span class="pill ok">OK</span> <span class="toc-page">p.83</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">e) Seguridad informática en la Red de Datos de Preconteo</span><span><span class="pill ok">OK</span> <span class="toc-page">p.84</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">f) Canales de Interconexión</span><span><span class="pill ok">OK</span> <span class="toc-page">p.85</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">g) Plataforma Infocandidatos — Congreso de la República</span><span><span class="pill bad">Falta anexo</span> <span class="toc-page">p.86</span></span></div>
+          <div class="toc-row main"><span class="toc-label">4. REQUERIMIENTO LOGÍSTICA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.87</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">a) Transmisión y Recepción de Datos Electorales</span><span><span class="pill ok">OK</span> <span class="toc-page">p.87</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">b) Requerimiento para las Salas de Prensa Departamentales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.92</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">c) Recurso Humano</span><span><span class="pill ok">OK</span> <span class="toc-page">p.95</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">d) Recurso Humano para Salas de Prensa</span><span><span class="pill ok">OK</span> <span class="toc-page">p.97</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">e) Otros Requerimientos de Logística</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.99</span></span></div>
+          <div class="toc-row main"><span class="toc-label">5. INFRAESTRUCTURA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.105</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">a) Infraestructura física</span><span><span class="pill ok">OK</span> <span class="toc-page">p.105</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">b) Centros de Recepción Telefónica (CRT)</span><span><span class="pill ok">OK</span> <span class="toc-page">p.105</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">c) Requerimientos técnicos de los CRT</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.110</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">d) Seguridad Física en CRT</span><span><span class="pill ok">OK</span> <span class="toc-page">p.112</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">e) Infraestructura Tecnológica</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.115</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">f) Oficinas de Seguimiento Departamentales</span><span><span class="pill ok">OK</span> <span class="toc-page">p.116</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">g) Centro de Control</span><span><span class="pill ok">OK</span> <span class="toc-page">p.118</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">h) Salas de Prensa</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.120</span></span></div>
+          <div class="toc-row main"><span class="toc-label">6. CAPACITACIÓN</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.126</span></span></div>
+          <div class="toc-row main"><span class="toc-label">7. INTEROPERABILIDAD</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.128</span></span></div>
+          <div class="toc-row main"><span class="toc-label">8. PRUEBAS FUNCIONALES, TÉCNICAS, DE ESPECIFICACIONES Y SIMULACRO</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.128</span></span></div>
+          <div class="toc-row main"><span class="toc-label">9. METAS PARA EL PROCESAMIENTO DE INFORMACIÓN</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.134</span></span></div>
+          <div class="toc-row main"><span class="toc-label">10. AUDITORÍAS</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.141</span></span></div>
+          <div class="toc-row main"><span class="toc-label">11. ENTREGABLES</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.141</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">a) Entregables del Proceso por la UT ILE 2026</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.141</span></span></div>
+          <div class="toc-row sub"><span class="toc-label">b) Actas a Suscribir</span><span><span class="pill ok">OK</span> <span class="toc-page">p.143</span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="revision" class="view hidden revision-view">
+      <div class="card revision-card-accent">
+        <div class="row">
+          <h3 style="margin:0;">Cola de revisión</h3>
+          <span class="pill" style="border-color:#c4783a;color:#f0c4a0;background:rgba(196,120,58,0.15);">Rol revisor · pestaña 6</span>
+        </div>
+        <table>
+          <thead><tr><th>Anexo</th><th>Sede</th><th>Evento</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>02</td><td>CRT Antioquia</td><td>Simulacro I</td><td>coord.crt</td><td>2026-02-12 09:10</td><td><button type="button" class="btn-go-detalle">Revisar</button></td></tr>
+            <tr><td>28</td><td>Casa Matriz</td><td>Prueba matriz</td><td>lider.pruebas</td><td>2026-02-12 09:44</td><td><button type="button" class="btn-go-detalle">Revisar</button></td></tr>
+          </tbody>
+        </table>
+        <p class="small"><strong>Revisar</strong> abre el detalle del anexo (misma vista que <strong>Abrir</strong> en Dashboard o <strong>2) Anexos</strong>; mock: Anexo 28). En producción esta vista suele mostrarse solo a usuarios con rol <strong>revisor</strong> o <strong>admin</strong>.</p>
+      </div>
+      <div class="card revision-card-accent">
+        <h4>Decisión de revisión (mock)</h4>
+        <textarea placeholder="Observaciones del revisor..."></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button class="primary">Aprobar anexo</button>
+          <button>Devolver con observaciones</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="redaccion" class="view hidden">
+      <div class="card">
+        <div class="row">
+          <h3 style="margin:0;">Redacción informe — Cap. VIII</h3>
+          <span class="pill warn">Nivel 3 · narrativo</span>
+          <div class="spacer"></div>
+          <label class="small" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            Sección activa
+            <select id="section-select" style="min-width:220px;">
+              <option>DESCRIPCIÓN DEL SERVICIO</option>
+              <option selected>6. CAPACITACIÓN</option>
+              <option>11. ENTREGABLES — a) Entregables UT ILE 2026</option>
+            </select>
+          </label>
+          <button type="button">Guardar borrador</button>
+          <button type="button" id="btn-send-section-review">Enviar sección a revisión</button>
+          <span id="section-review-status" class="pill hidden">Sección enviada a revisión</span>
+        </div>
+        <p class="small" style="margin:10px 0 0;">
+          <button type="button" id="btn-go-informe">← Ver resumen de armado (pestaña 5)</button>
+          · Tablero de índice, sección ↔ anexos y validación «Ver Anexo» en <strong>5) Informe PDF</strong>. Listado de anexos: <strong>1) Dashboard</strong> o <strong>2) Anexos</strong>. Cola de anexos: <strong>6) Revisión</strong> (revisor).
+        </p>
+      </div>
+      <div class="card">
+        <h4>Editor de sección — <span id="section-editor-title">6. CAPACITACIÓN</span></h4>
+        <textarea id="section-editor-body">La UT ILE 2026 garantizó las siguientes actividades:
+
+1. Planificó, diseñó e implementó un plan de capacitación... Ver Anexo 05.
+2. Impartió capacitación sobre el proceso... Ver Anexo 23.
+3. Impartió capacitación al personal RNEC... Ver Anexo 24.
+5. Se entregó kit didáctico... Ver Anexo 07.</textarea>
       </div>
     </section>
   </div>
@@ -429,13 +639,42 @@
   <script>
     const tabs = document.querySelectorAll(".tab");
     const views = document.querySelectorAll(".view");
-    tabs.forEach((t) => {
-      t.addEventListener("click", () => {
-        tabs.forEach((x) => x.classList.remove("active"));
-        views.forEach((v) => v.classList.add("hidden"));
-        t.classList.add("active");
-        document.getElementById(t.dataset.tab).classList.remove("hidden");
+
+    function switchTab(tabId) {
+      const isDetalle = tabId === "detalle";
+      tabs.forEach((x) => {
+        if (isDetalle) x.classList.remove("active");
+        else x.classList.toggle("active", x.dataset.tab === tabId);
       });
+      views.forEach((v) => v.classList.toggle("hidden", v.id !== tabId));
+    }
+
+    tabs.forEach((t) => {
+      t.addEventListener("click", () => switchTab(t.dataset.tab));
+    });
+
+    document.getElementById("btn-go-redaccion").addEventListener("click", () => switchTab("redaccion"));
+    document.getElementById("btn-go-informe").addEventListener("click", () => switchTab("informe"));
+
+    document.querySelectorAll(".btn-go-detalle").forEach((btn) => {
+      btn.addEventListener("click", () => switchTab("detalle"));
+    });
+
+    document.getElementById("btn-detalle-volver-dashboard").addEventListener("click", () => switchTab("dashboard"));
+    document.getElementById("btn-detalle-volver-anexos").addEventListener("click", () => switchTab("anexos"));
+    document.getElementById("btn-detalle-volver-revision").addEventListener("click", () => switchTab("revision"));
+
+    document.querySelectorAll("[data-menu-mock]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-menu-mock]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    const sectionSelect = document.getElementById("section-select");
+    const sectionEditorTitle = document.getElementById("section-editor-title");
+    sectionSelect.addEventListener("change", () => {
+      sectionEditorTitle.textContent = sectionSelect.options[sectionSelect.selectedIndex].text;
     });
 
     const fileModal = document.getElementById("file-modal");

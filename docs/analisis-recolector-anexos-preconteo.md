@@ -270,6 +270,16 @@ Incluir `manifest.json` con hashes y, si aplica, PDF de portada con índice firm
 
 > Objetivo: visualizar cómo sería el software **sin asumir requisitos no confirmados** (firma/canal oficial).
 
+### Roles de aplicación (cargador / revisor / admin)
+
+| Rol | Responsabilidad principal | En el mock HTML (`mock-html/index.html`) |
+| --- | --- | --- |
+| **Cargador** | Construye cada anexo: checklist, sube evidencias (nivel 2), solicita ajustes de ficha vía admin si aplica, **envía el anexo a revisión** cuando corresponde. | Flujo **Abrir** desde **1) Dashboard** o **2) Anexos** → vista detalle (sin pestaña propia). |
+| **Revisor** | Atiende la **cola de revisión**: abre el anexo, verifica ficha + archivos + trazabilidad, **aprueba** o **devuelve** con observaciones. No sustituye al admin en cambios de catálogo. | Pestaña **6) Revisión** (estilo visual distinto en la barra superior para marcar otro rol). |
+| **Admin** | Catálogo de 70 anexos, reglas de exportación, estados de flujo, roles, checklists por anexo. | **7) Configuración** (tabla de parámetros y reglas documentales). |
+
+**Nota:** En el prototipo estático no hay login: cualquier lector puede entrar a todas las pestañas; en producto se restringiría **6) Revisión** (y acciones de aprobación) a perfiles **revisor** / **admin**.
+
 ### Módulo 1 — Dashboard de 70 anexos
 
 ```text
@@ -310,7 +320,7 @@ Incluir `manifest.json` con hashes y, si aplica, PDF de portada con índice firm
 +--------------------------------------------------------------------------------------+
 ```
 
-### Módulo 3 — Revisión y cierre
+### Módulo 3 — Revisión y cierre (rol **revisor**; en el mock HTML es la pestaña **6) Revisión**)
 
 ```text
 +--------------------------------------------------------------------------------------+
