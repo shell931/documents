@@ -310,18 +310,18 @@
           <button type="button" id="btn-detalle-volver-revision">← Volver a Revisión</button>
         </div>
         <div class="row">
-          <h3 style="margin:0;">Anexo 28 — Entregables prueba Casa Matriz</h3>
+          <h3 style="margin:0;">Anexo 02 — Acta de verificación implementación CRT - OSD</h3>
           <span class="pill">En construcción</span>
           <div class="spacer"></div>
           <button id="btn-send-anexo-review">Enviar anexo a revisión</button>
           <span id="anexo-review-status" class="pill hidden">Anexo enviado a revisión</span>
         </div>
-        <p class="small">Sede: Casa Matriz · Evento: Prueba Casa Matriz</p>
+        <p class="small">Un solo anexo en catálogo; evidencias aportadas por departamento (TPS/ASD). Evento: Simulacro I</p>
       </div>
       <div class="card">
         <h4>Ficha del anexo (nivel 1: descripción general)</h4>
         <p class="small">Esta descripción es del catálogo del anexo (aplica siempre, no por archivo).</p>
-        <textarea id="catalog-description" disabled>Anexo 28 destinado a almacenar entregables de la prueba de Casa Matriz: MMV, boletines, imágenes FRT, logs y estados de comunicaciones según lineamientos.</textarea>
+        <textarea id="catalog-description" disabled>Anexo 02: acta de verificación de implementación en Centros de Recepción Telefónica (CRT) y Oficinas de Seguimiento Departamental (OSD). Las evidencias se reciben por departamento y se consolidan en un único entregable del anexo.</textarea>
         <div class="row" style="margin-top:10px;">
           <button>Ver historial de ficha</button>
           <button id="btn-open-request-modal">Solicitar ajuste a administrador</button>
@@ -329,39 +329,56 @@
         </div>
       </div>
       <div class="card">
+        <h4>Evidencias por departamento (mismo anexo)</h4>
+        <p class="small">Avance territorial antes del consolidado final del anexo 02.</p>
+        <table>
+          <thead><tr><th>Región</th><th>Departamento</th><th>Archivos</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>TPS</td><td>Valle</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
+            <tr><td>ASD</td><td>Antioquia</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
+            <tr><td>TPS</td><td>Cundinamarca</td><td>0</td><td><span class="pill bad">Pendiente</span></td></tr>
+            <tr><td>TPS</td><td>Bogotá D.C.</td><td>0</td><td><span class="pill warn">En curso</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Consolidado del anexo</h4>
+        <p class="small">Un único entregable del <strong>Anexo 02</strong> al cierre (carpeta o documento merge en exportación ZIP). Mock: pendiente hasta cerrar aportes departamentales requeridos.</p>
+        <div class="row">
+          <span class="pill warn">Consolidado pendiente</span>
+          <button type="button" disabled title="Mock: disponible cuando admin/región cierre el anexo">Generar consolidado del anexo</button>
+        </div>
+      </div>
+      <div class="card">
         <h4>Checklist operativo</h4>
         <div class="row">
-          <label><input type="checkbox" checked /> MMV</label>
-          <label><input type="checkbox" checked /> Boletines</label>
-          <label><input type="checkbox" /> Imágenes FRT</label>
-          <label><input type="checkbox" checked /> Logs comunicaciones</label>
+          <label><input type="checkbox" checked /> Acta suscrita</label>
+          <label><input type="checkbox" checked /> Verificación CRT</label>
+          <label><input type="checkbox" /> Referencia OSD</label>
         </div>
       </div>
       <div class="card">
         <h4>Archivos cargados</h4>
         <table>
-          <thead><tr><th>Archivo</th><th>Descripción evidencia (nivel 2)</th><th>Subido por</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <thead><tr><th>Archivo</th><th>Región</th><th>Departamento</th><th>Descripción evidencia (nivel 2)</th><th>Subido por</th><th>Fecha</th><th>Acción</th></tr></thead>
           <tbody>
             <tr>
-              <td>boletin_preconteo_v3.pdf</td>
-              <td>Boletín consolidado de preconteo, corte 14:20 Casa Matriz.</td>
+              <td>acta_crt_valle.pdf</td>
+              <td>TPS</td>
+              <td>Valle</td>
+              <td>Acta verificación CRT Valle — Simulacro I.</td>
               <td>jrocha</td>
               <td>2026-02-11 14:22</td>
-              <td><button class="btn-view-file" data-file="boletin_preconteo_v3.pdf" data-desc="Boletín consolidado de preconteo, corte 14:20 Casa Matriz.">Ver</button></td>
+              <td><button class="btn-view-file" data-file="acta_crt_valle.pdf" data-desc="Acta verificación CRT Valle — Simulacro I.">Ver</button></td>
             </tr>
             <tr>
-              <td>consolidado_mmv_01.mmv</td>
-              <td>Archivo MMV de consolidación prueba Casa Matriz.</td>
-              <td>acastro</td>
-              <td>2026-02-11 14:31</td>
-              <td><button class="btn-view-file" data-file="consolidado_mmv_01.mmv" data-desc="Archivo MMV de consolidación prueba Casa Matriz.">Ver</button></td>
-            </tr>
-            <tr>
-              <td>log_telefonia_crt.zip</td>
-              <td>Logs de telefonía del CRT durante ventana de prueba.</td>
-              <td>acastro</td>
-              <td>2026-02-11 14:45</td>
-              <td><button class="btn-view-file" data-file="log_telefonia_crt.zip" data-desc="Logs de telefonía del CRT durante ventana de prueba.">Ver</button></td>
+              <td>acta_crt_antioquia.pdf</td>
+              <td>ASD</td>
+              <td>Antioquia</td>
+              <td>Acta verificación CRT Antioquia — Simulacro I.</td>
+              <td>coord.crt</td>
+              <td>2026-02-12 09:10</td>
+              <td><button class="btn-view-file" data-file="acta_crt_antioquia.pdf" data-desc="Acta verificación CRT Antioquia — Simulacro I.">Ver</button></td>
             </tr>
           </tbody>
         </table>
@@ -417,7 +434,7 @@
           <thead><tr><th>Nivel</th><th>Qué se configura</th><th>Dónde se usa</th></tr></thead>
           <tbody>
             <tr><td>1. Descripción general del anexo</td><td>Ficha del catálogo por anexo (texto guía)</td><td>Vista detalle (Abrir / Revisar; listados en 1) Dashboard y 2) Anexos)</td></tr>
-            <tr><td>2. Descripción de evidencia</td><td>Campo obligatorio por archivo o lote subido</td><td>Vista detalle (desde Abrir en 1) o 2))</td></tr>
+            <tr><td>2. Descripción de evidencia</td><td>Región + departamento + descripción por archivo</td><td>Modal Subir evidencia en detalle de anexo</td></tr>
             <tr><td>3. Texto narrativo del informe</td><td>Plantillas por sección; citas «Ver Anexo XX» validadas contra evidencias</td><td>3) Redacción (texto) · 5) Informe PDF (resumen + validación) · 6) Revisión (rol revisor)</td></tr>
           </tbody>
         </table>
@@ -604,14 +621,25 @@
         <div class="spacer"></div>
         <button id="btn-close-upload-modal">Cerrar</button>
       </div>
-      <p class="small">Archivo</p>
-      <input type="file" style="width:100%; margin-bottom:10px;" />
-      <p class="small">Descripción de evidencia (obligatoria)</p>
-      <textarea id="upload-description" placeholder="Describe qué evidencia contiene este archivo..."></textarea>
+      <p class="small">Aporta al <strong>mismo anexo</strong> del catálogo; cada archivo queda asociado a región y departamento. En producto se valida que el depto pertenezca a la región y a tus permisos.</p>
+      <p class="small">1) Región (contratista)</p>
+      <select id="upload-region" style="width:100%; margin-bottom:10px;">
+        <option value="">Seleccione región…</option>
+        <option value="TPS">Región TPS (TPS)</option>
+        <option value="ASD">Región ASD (ASD)</option>
+      </select>
+      <p class="small">2) Departamento</p>
+      <select id="upload-departamento" style="width:100%; margin-bottom:10px;" disabled>
+        <option value="">Primero elija región…</option>
+      </select>
+      <p class="small">3) Archivo</p>
+      <input id="upload-file" type="file" style="width:100%; margin-bottom:10px;" />
+      <p class="small">4) Descripción de evidencia (obligatoria, nivel 2)</p>
+      <textarea id="upload-description" placeholder="Ej.: Acta verificación CRT — jornada Simulacro I…"></textarea>
       <div class="row" style="margin-top:10px;">
         <button id="btn-upload-save" class="primary">Subir y guardar</button>
       </div>
-      <p id="upload-error" class="small" style="color:#ff9fb3; display:none;">La descripción de evidencia es obligatoria.</p>
+      <p id="upload-error" class="small" style="color:#ff9fb3; display:none;"></p>
     </div>
   </div>
 
@@ -624,7 +652,7 @@
       </div>
       <p class="small">La descripción de catálogo es de solo lectura para este rol. Envía solicitud al administrador documental.</p>
       <p class="small">Descripción actual</p>
-      <textarea disabled>Anexo 28 destinado a almacenar entregables de la prueba de Casa Matriz: MMV, boletines, imágenes FRT, logs y estados de comunicaciones según lineamientos.</textarea>
+      <textarea disabled>Anexo 02: acta de verificación CRT/OSD; evidencias por departamento consolidadas en un único entregable del anexo.</textarea>
       <p class="small">Propuesta de ajuste</p>
       <textarea id="request-proposal" placeholder="Propón el texto ajustado para la ficha del anexo..."></textarea>
       <p class="small">Justificación</p>
@@ -694,7 +722,47 @@
       fileModal.classList.remove("open");
     });
 
+    const DEPTOS_BY_REGION = {
+      TPS: [
+        "BOGOTÁ D.C.", "CUNDINAMARCA", "VALLE", "BOYACÁ", "CAQUETÁ", "CAUCA", "GUAINÍA", "GUAVIARE",
+        "META", "PUTUMAYO", "QUINDÍO", "RISARALDA", "SAN ANDRÉS", "CALDAS", "AMAZONAS", "ARAUCA",
+        "CHOCÓ", "TOLIMA", "VAUPÉS", "VICHADA",
+      ],
+      ASD: [
+        "ANTIOQUIA", "ATLÁNTICO", "BOLÍVAR", "SANTANDER", "CASANARE", "LA GUAJIRA", "NORTE DE SANTANDER",
+        "NARIÑO", "MAGDALENA", "CESAR", "SUCRE", "CÓRDOBA", "HUILA",
+      ],
+    };
+
+    const uploadRegion = document.getElementById("upload-region");
+    const uploadDepartamento = document.getElementById("upload-departamento");
+
+    function resetUploadTerritory() {
+      uploadRegion.value = "";
+      uploadDepartamento.innerHTML = '<option value="">Primero elija región…</option>';
+      uploadDepartamento.disabled = true;
+    }
+
+    function fillUploadDepartamentos(regionCode) {
+      uploadDepartamento.innerHTML = '<option value="">Seleccione departamento…</option>';
+      (DEPTOS_BY_REGION[regionCode] || []).forEach((nombre) => {
+        const opt = document.createElement("option");
+        opt.value = nombre;
+        opt.textContent = nombre;
+        uploadDepartamento.appendChild(opt);
+      });
+      uploadDepartamento.disabled = !regionCode;
+    }
+
+    uploadRegion.addEventListener("change", () => {
+      fillUploadDepartamentos(uploadRegion.value);
+    });
+
     document.getElementById("btn-open-upload").addEventListener("click", () => {
+      resetUploadTerritory();
+      document.getElementById("upload-description").value = "";
+      document.getElementById("upload-file").value = "";
+      document.getElementById("upload-error").style.display = "none";
       uploadModal.classList.add("open");
     });
 
@@ -703,15 +771,29 @@
     });
 
     document.getElementById("btn-upload-save").addEventListener("click", () => {
+      const region = uploadRegion.value;
+      const depto = uploadDepartamento.value;
       const desc = document.getElementById("upload-description").value.trim();
+      const fileInput = document.getElementById("upload-file");
       const err = document.getElementById("upload-error");
+      if (!region || !depto) {
+        err.textContent = "Seleccione región y departamento.";
+        err.style.display = "block";
+        return;
+      }
+      if (!fileInput.files || !fileInput.files.length) {
+        err.textContent = "Seleccione un archivo.";
+        err.style.display = "block";
+        return;
+      }
       if (!desc) {
+        err.textContent = "La descripción de evidencia es obligatoria.";
         err.style.display = "block";
         return;
       }
       err.style.display = "none";
       uploadModal.classList.remove("open");
-      alert("Mock: evidencia subida con descripción.");
+      alert(`Mock: evidencia subida — Región ${region}, ${depto}.`);
     });
 
     const requestModal = document.getElementById("request-modal");

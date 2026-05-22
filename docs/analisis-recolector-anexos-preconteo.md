@@ -280,6 +280,70 @@ Incluir `manifest.json` con hashes y, si aplica, PDF de portada con índice firm
 
 **Nota:** En el prototipo estático no hay login: cualquier lector puede entrar a todas las pestañas; en producto se restringiría **6) Revisión** (y acciones de aprobación) a perfiles **revisor** / **admin**.
 
+### Organización territorial (TPS / ASD) y consolidado por anexo
+
+*Propuesta operativa acordada con el equipo — no extraída literal del informe Cap. VIII.*
+
+#### Reparto por contratista y región
+
+| Región | Contratista | Departamentos |
+| --- | --- | --- |
+| **Región TPS** | TPS | Bogotá D.C., Cundinamarca, Valle, Boyacá, Caquetá, Cauca, Guainía, Guaviare, Meta, Putumayo, Quindío, Risaralda, San Andrés, Caldas, Amazonas, Arauca, Chocó, Tolima, Vaupés, Vichada (**20**) |
+| **Región ASD** | ASD | Antioquia, Atlántico, Bolívar, Santander, Casanare, La Guajira, Norte de Santander, Nariño, Magdalena, Cesar, Sucre, Córdoba, Huila (**13**) |
+
+Total **33** territorios (32 departamentos + Bogotá D.C.). Cada departamento pertenece a **una sola región** (relación fija en catálogo maestro, editable solo por **admin**).
+
+#### Un anexo, muchas evidencias departamentales, un consolidado final
+
+- El **catálogo 01–70** no se duplica por departamento: sigue habiendo **un solo Anexo 02**, **un solo Anexo 28**, etc.
+- Durante la operación, **varios departamentos** (y las dos regiones) **suben evidencias** al **mismo** `anexo_id`, cada carga etiquetada con **región + departamento** (+ evento, descripción nivel 2).
+- Un **usuario** puede estar habilitado para **varios departamentos** (incluso de distintas regiones si aplica); en **cada subida** elige región y departamento.
+- Al cierre del hito, el sistema o el consolidador arma **un único entregable del anexo** (carpeta `02. …` en el ZIP, documento merge, o paquete acordado), no 33 anexos distintos del mismo número.
+
+```text
+Anexo 02 (único en catálogo)
+  ├── carga — Valle (TPS)
+  ├── carga — Antioquia (ASD)
+  ├── carga — Cundinamarca (TPS)
+  └── … → revisión regional → consolidado del anexo 02 → ZIP nacional 01..70
+```
+
+#### Validaciones en carga (producto)
+
+1. **Región** y **departamento** obligatorios en el modal de subida.
+2. El departamento debe pertenecer a la región seleccionada.
+3. El departamento debe estar en la lista de permisos del usuario (`usuario_departamento`).
+4. El **revisor** debería ver solo su región (TPS o ASD) en la cola de revisión.
+
+#### Modelo de datos (extensión del §3.2)
+
+```text
+Region { id, codigo: TPS|ASD, contratista, nombre }
+Departamento { id, nombre, region_id }   // 33 filas fijas
+UsuarioDepartamento { usuario_id, departamento_id }   // N:M
+
+Evidencia / Archivo {
+  entrega_id (anexo + evento),
+  region_id,
+  departamento_id,
+  descripcion_nivel_2,
+  ...
+}
+
+ConsolidadoAnexo {
+  anexo_id, evento_id,
+  estado: pendiente | regional_ok | nacional_ok,
+  artefacto_uri   // ZIP parcial, PDF único, etc. según tipo de anexo
+}
+```
+
+Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito **Nacional** sin departamento, o reglas aparte (pendiente de operación UT ILE).
+
+#### En el mock HTML
+
+- Modal **Subir evidencia**: selectores **1) Región** → **2) Departamento** (lista filtrada) antes del archivo.
+- Detalle de anexo: tabla de archivos con columnas Región / Departamento; bloques **Evidencias por departamento** y **Consolidado del anexo**.
+
 ### Módulo 1 — Dashboard de 70 anexos
 
 ```text
@@ -303,20 +367,24 @@ Incluir `manifest.json` con hashes y, si aplica, PDF de portada con índice firm
 
 ```text
 +--------------------------------------------------------------------------------------+
-| Anexo 28 — Entregables prueba Casa Matriz                                           |
-| Estado: En construcción      Sede: Casa Matriz      Evento: Prueba Casa Matriz      |
+| Anexo 02 — Acta de verificación implementación CRT - OSD                             |
+| Estado: En construcción      Evento: Simulacro I                                     |
++--------------------------------------------------------------------------------------+
+| Evidencias por departamento (avance del mismo anexo):                                |
+|  Región TPS | Valle        | 1 archivo  | OK                                        |
+|  Región ASD | Antioquia    | 1 archivo  | OK                                        |
+|  Región TPS | Cundinamarca | 0 archivos  | Pendiente                                |
++--------------------------------------------------------------------------------------+
+| Consolidado del anexo 02: [Pendiente] — se genera al cerrar regiones / nacional      |
 +--------------------------------------------------------------------------------------+
 | Checklist operativo (editable por configuración):                                    |
-| [x] MMV        [x] Boletines        [ ] Imágenes FRT        [x] Logs comunicaciones |
+| [x] Acta firmada   [ ] Anexo referencia CRT   ...                                    |
 +--------------------------------------------------------------------------------------+
-| Archivos cargados                                                                     |
-| - boletin_preconteo_v3.pdf      (subido por: jrocha / 2026-02-11 14:22)             |
-| - consolidado_mmv_01.mmv        (subido por: acastro / 2026-02-11 14:31)            |
-| - log_telefonia_crt.zip         (subido por: acastro / 2026-02-11 14:45)            |
-| [Subir archivos] [Agregar nota] [Marcar listo para revisión]                         |
-+--------------------------------------------------------------------------------------+
-| Trazabilidad                                                                          |
-| 14:22 carga archivo | 14:31 reemplazo versión | 14:45 carga evidencia                |
+| Archivos cargados                                                                   |
+| Archivo              | Región | Departamento  | Descripción (nivel 2) | Quién | Fecha |
+| acta_crt_valle.pdf   | TPS    | Valle         | Acta CRT Valle Sim I  | jrocha| ...   |
+| acta_crt_antioquia.pdf | ASD  | Antioquia     | Acta CRT Antioquia    | coord | ...   |
+| [Subir archivos] → modal: [Región v] [Departamento v] [Archivo] [Descripción *]      |
 +--------------------------------------------------------------------------------------+
 ```
 
