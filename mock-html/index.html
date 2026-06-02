@@ -2,40 +2,49 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#122459" />
   <title>Mock Recolector Anexos Preconteo</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --panel: #121a2f;
-      --muted: #8ea0c0;
-      --text: #ecf2ff;
-      --line: #2a3554;
-      --ok: #1dbf73;
-      --warn: #f4b400;
-      --bad: #ff5c7a;
-      --accent: #5c7cff;
+      --primary: #122459;
+      --primary-hover: #1a3270;
+      --bg: #fafafa;
+      --panel: #ffffff;
+      --muted: #5c6b7a;
+      --text: #1e293b;
+      --line: #e2e8f0;
+      --ok: #15803d;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --accent: var(--primary);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Inter, Segoe UI, Roboto, sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #0e1528 100%);
+      background: var(--bg);
       color: var(--text);
     }
-    .wrap { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
-    .title { margin: 0 0 8px; font-size: 24px; }
+    .wrap {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .title { margin: 0 0 8px; font-size: clamp(1.125rem, 4vw, 1.5rem); color: var(--primary); line-height: 1.25; }
     .subtitle { margin: 0 0 20px; color: var(--muted); }
 
     .tabs {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 16px;
     }
     .tab {
       border: 1px solid var(--line);
-      background: #111936;
+      background: var(--panel);
       color: var(--text);
       padding: 10px 8px;
       border-radius: 10px;
@@ -43,30 +52,22 @@
       font-weight: 600;
       font-size: 12px;
     }
-    .tab.active { border-color: var(--accent); background: #18244a; }
+    .tab.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
     /* Pestaña Revisión (rol revisor) — tono cobre / ámbar */
     .tab.tab-revisor {
-      background: linear-gradient(180deg, #2a1e16 0%, #181210 100%);
-      border-color: #8b5535;
-      color: #f0c9a8;
+      background: #fff8f0;
+      border-color: #d4a574;
+      color: #92400e;
     }
     .tab.tab-revisor.active {
-      border-color: #e4a048;
-      background: linear-gradient(180deg, #3d2a1c 0%, #241a12 100%);
-      color: #ffebd6;
-      box-shadow: 0 0 0 1px rgba(228, 160, 72, 0.35);
-    }
-    /* Pestaña Configuración (rol admin) — tono verde */
-    .tab.tab-admin {
-      background: linear-gradient(180deg, #173225 0%, #11221a 100%);
-      border-color: #2f8a62;
-      color: #c9f5df;
-    }
-    .tab.tab-admin.active {
-      border-color: #43bf85;
-      background: linear-gradient(180deg, #1f4835 0%, #162b21 100%);
-      color: #ebfff5;
-      box-shadow: 0 0 0 1px rgba(67, 191, 133, 0.35);
+      border-color: #c4783a;
+      background: #c4783a;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(196, 120, 58, 0.25);
     }
 
     .card {
@@ -75,6 +76,7 @@
       border-radius: 14px;
       padding: 16px;
       margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(18, 36, 89, 0.04);
     }
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
     .pill {
@@ -83,21 +85,48 @@
       padding: 4px 10px;
       font-size: 12px;
       color: var(--muted);
-      background: #121c38;
+      background: #f1f5f9;
     }
-    .pill.ok { color: #b6ffd8; border-color: #1e7a55; }
-    .pill.warn { color: #ffeab0; border-color: #826b1e; }
-    .pill.bad { color: #ffc4d1; border-color: #813244; }
+    .pill.ok { color: var(--ok); border-color: #86efac; background: #f0fdf4; }
+    .pill.warn { color: var(--warn); border-color: #fcd34d; background: #fffbeb; }
+    .pill.bad { color: var(--bad); border-color: #fca5a5; background: #fef2f2; }
+    .role-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .role-banner.cargador {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: #1e40af;
+    }
+    .role-banner.revisor {
+      background: #fff8f0;
+      border: 1px solid #d4a574;
+      color: #92400e;
+    }
     .spacer { flex: 1; }
     button {
       border: 1px solid var(--line);
-      background: #1a274f;
+      background: var(--panel);
       color: var(--text);
       padding: 8px 12px;
       border-radius: 8px;
       cursor: pointer;
+      min-height: 40px;
+      font-size: 14px;
     }
-    button.primary { background: var(--accent); border-color: #4f6df0; }
+    button:hover { border-color: #cbd5e1; }
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+    button.primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -114,11 +143,14 @@
     .hidden { display: none; }
     input, select, textarea {
       border: 1px solid var(--line);
-      background: #0f1730;
+      background: #ffffff;
       color: var(--text);
       border-radius: 8px;
       padding: 8px 10px;
+      max-width: 100%;
+      font-size: 16px; /* evita zoom automático en iOS */
     }
+    select, input:not([type="file"]) { min-height: 40px; }
     textarea { width: 100%; min-height: 80px; }
     .kpi {
       display: grid;
@@ -131,7 +163,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(4, 8, 20, 0.75);
+      background: rgba(18, 36, 89, 0.45);
       display: none;
       align-items: center;
       justify-content: center;
@@ -147,6 +179,62 @@
       padding: 16px;
     }
     .modal h3 { margin-top: 0; }
+    .evidence-preview {
+      margin: 10px 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #e2e8f0;
+      line-height: 0;
+    }
+    .evidence-preview svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: min(340px, 45vh);
+    }
+    .segment-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #f8fafc;
+    }
+    .segment-card:last-child { margin-bottom: 0; }
+    .segment-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .segment-header strong { color: var(--primary); font-size: 14px; }
+    .segment-actions { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+    .segment-actions button {
+      min-height: 32px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .segment-field { margin-bottom: 10px; }
+    .segment-field:last-child { margin-bottom: 0; }
+    .segment-annexes { margin-top: 6px; gap: 6px; }
+    .segment-annexes .pill { font-size: 11px; }
+    #btn-add-segment { margin-top: 14px; width: 100%; }
+    .catalog-scroll {
+      max-height: min(520px, 60vh);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+    .catalog-scroll table { margin-top: 0; }
+    .catalog-scroll thead th {
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+      z-index: 1;
+      box-shadow: 0 1px 0 var(--line);
+    }
     /* Índice Cap. VIII (Contenido del PDF) — progreso por sección */
     .toc-scroll {
       max-height: 440px;
@@ -154,7 +242,7 @@
       border: 1px solid var(--line);
       border-radius: 10px;
       margin-top: 10px;
-      background: #0d1428;
+      background: #f8fafc;
     }
     .toc-row {
       display: grid;
@@ -174,43 +262,141 @@
     .toc-row.main .toc-label { font-weight: 600; color: var(--text); }
     .toc-label { line-height: 1.35; }
     .toc-page { font-size: 11px; color: var(--muted); white-space: nowrap; }
-    /* Menú Anexos (pestaña 2) */
-    .anexos-layout {
-      display: grid;
-      grid-template-columns: minmax(200px, 240px) 1fr;
-      gap: 16px;
-      margin-top: 12px;
-      align-items: start;
-    }
-    .anexos-menu {
-      border-right: 1px solid var(--line);
-      padding-right: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .anexo-menu-btn {
-      text-align: left;
-      font-size: 12px;
-      background: #141f3d;
-    }
-    .anexo-menu-btn.active {
-      border-color: var(--accent);
-      background: #18244a;
-    }
-    .anexos-panel { min-width: 0; }
     #revision .revision-card-accent {
       border-left: 4px solid #c4783a;
-      background: linear-gradient(90deg, rgba(196, 120, 58, 0.12) 0%, var(--panel) 14%);
+      background: linear-gradient(90deg, rgba(196, 120, 58, 0.08) 0%, var(--panel) 12%);
     }
-    .accent-revisor { color: #e4a048; }
-    #config .config-card-accent {
-      border-left: 4px solid #3da875;
-      background: linear-gradient(90deg, rgba(61, 168, 117, 0.12) 0%, var(--panel) 14%);
+    .accent-revisor { color: #c4783a; }
+
+    /* ——— Responsive ——— */
+    @media (max-width: 1024px) {
+      .kpi { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 760px) {
-      .anexos-layout { grid-template-columns: 1fr; }
-      .anexos-menu { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+
+    @media (max-width: 900px) {
+      .tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 8px;
+        margin-bottom: 16px;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+      }
+      .tabs::-webkit-scrollbar { height: 4px; }
+      .tabs::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      .tab {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        white-space: nowrap;
+        font-size: 11px;
+        padding: 10px 12px;
+      }
+      .card:has(table) {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .card table { min-width: 520px; }
+      .toc-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .toc-row > span:last-child {
+        justify-self: start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { margin: 12px auto 24px; padding: 0 12px; }
+      .card { padding: 14px; border-radius: 12px; }
+      .kpi { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .kpi .card h3 { font-size: 1.25rem; margin: 4px 0 0; }
+      .row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .row .spacer { display: none; }
+      .row > button,
+      .row > .primary,
+      .row > input,
+      .row > select,
+      .row > label {
+        width: 100%;
+      }
+      .row > label {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+      }
+      .row > label select { width: 100%; }
+      .card > .row > button,
+      .card > .row > .primary,
+      .card .row:not(:first-child) > button.primary,
+      #detalle .card .row button.primary,
+      #exportacion .card .row button.primary,
+      #informe .card > .row > button,
+      #redaccion .card > .row > button,
+      #revision .card .row button.primary {
+        width: 100%;
+      }
+      .tab,
+      table button {
+        width: auto;
+      }
+      /* filas con solo botones de volver: en línea si caben */
+      #detalle .card:first-child .row {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      #detalle .card:first-child .row button {
+        width: auto;
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+      #detalle .card:nth-child(2) .row button { width: auto; flex: 1 1 auto; }
+      #detalle .card:nth-child(2) h3 { font-size: 1rem; width: 100%; }
+      .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal {
+        width: 100%;
+        max-height: min(92vh, 100dvh);
+        overflow-y: auto;
+        border-radius: 16px 16px 0 0;
+        padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+      }
+      .modal .row button { width: auto; }
+      .modal .row .primary { width: 100%; }
+      th, td { padding: 8px 6px; font-size: 13px; }
+      .card table { min-width: 480px; }
+      .toc-scroll { max-height: 50vh; }
+      .card input[placeholder],
+      #section-select {
+        min-width: 0 !important;
+        width: 100%;
+      }
+      #redaccion .card > .row:first-child {
+        flex-direction: column;
+      }
+      #informe .card > .row:first-child button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .kpi { grid-template-columns: 1fr; }
+      .tab { font-size: 10px; padding: 8px 10px; }
     }
   </style>
 </head>
@@ -220,119 +406,29 @@
     <p class="subtitle"></p>
 
     <div class="tabs">
-      <button class="tab active" data-tab="dashboard">1) Dashboard</button>
-      <button class="tab" data-tab="anexos">2) Anexos</button>
-      <button class="tab" data-tab="redaccion">3) Redacción informe</button>
-      <button class="tab" data-tab="exportacion">4) Exportación Zip</button>
-      <button class="tab" data-tab="informe">5) Informe PDF</button>
-      <button class="tab tab-revisor" data-tab="revision">6) Revisión</button>
-      <button class="tab tab-admin" data-tab="config">7) Configuración</button>
+      <button class="tab active" data-tab="anexos">1) Anexos</button>
+      <button class="tab" data-tab="redaccion">2) Redacción informe</button>
+      <button class="tab" data-tab="exportacion">3) Exportación Zip</button>
+      <button class="tab" data-tab="informe">4) Informe PDF</button>
+      <button class="tab tab-revisor" data-tab="revision">5) Revisión</button>
     </div>
 
-    <section id="dashboard" class="view">
+    <section id="anexos" class="view">
       <div class="kpi">
-        <div class="card"><div class="small">Anexos cerrados</div><h3>32 / 70</h3></div>
+        <div class="card"><div class="small">Anexos aprobados</div><h3>32 / 70</h3></div>
         <div class="card"><div class="small">En revisión</div><h3>8</h3></div>
-        <div class="card"><div class="small">En construcción</div><h3>20</h3></div>
+        <div class="card"><div class="small">En proceso</div><h3>20</h3></div>
         <div class="card"><div class="small">Pendientes</div><h3>10</h3></div>
       </div>
       <div class="card">
-        <div class="row">
-          <select><option>Evento: Simulacro I</option><option>Simulacro II</option><option>Día electoral</option></select>
-          <select><option>Estado: Todos</option><option>Cerrado</option><option>Revisión</option><option>En construcción</option></select>
-          <input placeholder="Buscar anexo..." />
-          <div class="spacer"></div>
-          <button class="primary">Exportar paquete 01..70</button>
+        <h3 style="margin-top:0;">Evidencias del anexo por departamento</h3>
+        <p class="small">Resumen del anexo seleccionado: cuántas <strong>evidencias</strong> aportó cada departamento al mismo anexo (p. ej. Anexo 02). No es el detalle de archivos — solo el conteo por territorio. Evento: Simulacro I</p>
+        <div class="row" style="margin-top:12px;">
+          <select id="avance-anexo-select" aria-label="Anexo para avance territorial"></select>
+          <select aria-label="Filtrar por región"><option>Región: Todas</option><option>TPS</option><option>ASD</option></select>
         </div>
-        <table>
-          <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th><th>Acción</th></tr></thead>
-          <tbody>
-            <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-            <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-            <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-            <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-          </tbody>
-        </table>
-        <p class="small">No hay pestaña «detalle»: <strong>Abrir</strong> abre ficha y evidencias. El listado completo con menú lateral está en <strong>2) Anexos</strong>. Mock: todas las filas abren el ejemplo Anexo 28.</p>
-      </div>
-    </section>
-
-    <section id="anexos" class="view hidden">
-      <div class="card">
-        <h3 style="margin-top:0;">Menú de anexos — catálogo 01–70</h3>
-        <p class="small">Vista dedicada al listado operativo del paquete Preconteo Congreso. El menú izquierdo agrupa filtros rápidos (mock); la tabla replica el criterio del Dashboard con más filas de ejemplo.</p>
-        <div class="anexos-layout">
-          <nav class="anexos-menu" aria-label="Menú de anexos">
-            <div class="small" style="margin-bottom:4px;">Alcance</div>
-            <button type="button" class="anexo-menu-btn active" data-menu-mock>Todos (01–70)</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Solo construcción / pendiente</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>En revisión</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Cerrados</button>
-            <div class="small" style="margin:14px 0 4px;">Bloques temáticos (mock)</div>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Actas y verificación CRT</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Simulacros y Casa Matriz</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Infraestructura y Data Center</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Entregables día electoral</button>
-            <button type="button" class="anexo-menu-btn" data-menu-mock>Consulados / preconteo exterior</button>
-          </nav>
-          <div class="anexos-panel">
-            <div class="row">
-              <select><option>Evento: Todos</option><option>Simulacro I</option><option>Simulacro II</option><option>Prueba Casa Matriz</option><option>Día electoral</option></select>
-              <select><option>Estado: Todos</option><option>Cerrado</option><option>Revisión</option><option>En construcción</option><option>Pendiente</option></select>
-              <input placeholder="Buscar por # o nombre..." style="min-width:200px;" />
-              <div class="spacer"></div>
-              <span class="pill">Mostrando 8 de 70 · mock</span>
-            </div>
-            <table>
-              <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th><th>Acción</th></tr></thead>
-              <tbody>
-                <tr><td>01</td><td>Acta de aprobación CRT - OSD</td><td><span class="pill ok">Cerrado</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>02</td><td>Acta de verificación implementación CRT - OSD</td><td><span class="pill warn">Revisión</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>05</td><td>Plan de capacitación y cronograma</td><td><span class="pill ok">Cerrado</span></td><td>4</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>07</td><td>Kit didáctico y material de apoyo</td><td><span class="pill">En construcción</span></td><td>1</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>22</td><td>Certificación del Datacenter</td><td><span class="pill ok">Cerrado</span></td><td>2</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>28</td><td>Entregables prueba Casa Matriz</td><td><span class="pill">En construcción</span></td><td>3</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>37</td><td>Acta Simulacro Preconteo I</td><td><span class="pill ok">Cerrado</span></td><td>5</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-                <tr><td>67</td><td>Entregables día electoral</td><td><span class="pill bad">Pendiente</span></td><td>0</td><td><button type="button" class="btn-go-detalle">Abrir</button></td></tr>
-              </tbody>
-            </table>
-            <p class="small">Los ítems del menú lateral no filtran la tabla en este mock; solo muestran el patrón de navegación previsto.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="detalle" class="view hidden">
-      <div class="card">
-        <div class="row" style="margin-bottom:10px;">
-          <button type="button" id="btn-detalle-volver-dashboard">← Volver al Dashboard</button>
-          <button type="button" id="btn-detalle-volver-anexos">← Volver a Anexos</button>
-          <button type="button" id="btn-detalle-volver-revision">← Volver a Revisión</button>
-        </div>
-        <div class="row">
-          <h3 style="margin:0;">Anexo 02 — Acta de verificación implementación CRT - OSD</h3>
-          <span class="pill">En construcción</span>
-          <div class="spacer"></div>
-          <button id="btn-send-anexo-review">Enviar anexo a revisión</button>
-          <span id="anexo-review-status" class="pill hidden">Anexo enviado a revisión</span>
-        </div>
-        <p class="small">Un solo anexo en catálogo; evidencias aportadas por departamento (TPS/ASD). Evento: Simulacro I</p>
-      </div>
-      <div class="card">
-        <h4>Ficha del anexo (nivel 1: descripción general)</h4>
-        <p class="small">Esta descripción es del catálogo del anexo (aplica siempre, no por archivo).</p>
-        <textarea id="catalog-description" disabled>Anexo 02: acta de verificación de implementación en Centros de Recepción Telefónica (CRT) y Oficinas de Seguimiento Departamental (OSD). Las evidencias se reciben por departamento y se consolidan en un único entregable del anexo.</textarea>
-        <div class="row" style="margin-top:10px;">
-          <button>Ver historial de ficha</button>
-          <button id="btn-open-request-modal">Solicitar ajuste a administrador</button>
-          <span id="catalog-request-status" class="pill hidden">Pendiente aprobación admin</span>
-        </div>
-      </div>
-      <div class="card">
-        <h4>Evidencias por departamento (mismo anexo)</h4>
-        <p class="small">Avance territorial antes del consolidado final del anexo 02.</p>
-        <table>
-          <thead><tr><th>Región</th><th>Departamento</th><th>Archivos</th><th>Estado</th></tr></thead>
+        <table style="margin-top:12px;">
+          <thead><tr><th>Región</th><th>Departamento</th><th>Evidencias del anexo</th><th>Estado</th></tr></thead>
           <tbody>
             <tr><td>TPS</td><td>Valle</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
             <tr><td>ASD</td><td>Antioquia</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
@@ -342,53 +438,156 @@
         </table>
       </div>
       <div class="card">
-        <h4>Consolidado del anexo</h4>
-        <p class="small">Un único entregable del <strong>Anexo 02</strong> al cierre (carpeta o documento merge en exportación ZIP). Mock: pendiente hasta cerrar aportes departamentales requeridos.</p>
-        <div class="row">
-          <span class="pill warn">Consolidado pendiente</span>
-          <button type="button" disabled title="Mock: disponible cuando admin/región cierre el anexo">Generar consolidado del anexo</button>
+        <h3 style="margin-top:0;">Catálogo de anexos 01–70</h3>
+        <p class="small">Listado operativo del paquete Preconteo Congreso. Filtrar por estado o buscar por número/nombre. <strong>Abrir</strong> lleva al detalle (sin pestaña propia).</p>
+        <div class="row" style="margin-top:12px;">
+          <select aria-label="Filtrar por estado"><option>Estado: Todos</option><option>Aprobado</option><option>Revisión</option><option>En proceso</option><option>Pendiente</option></select>
+          <input id="catalog-search" placeholder="Buscar por # o nombre..." style="min-width:200px; flex:1;" aria-label="Buscar anexo" />
         </div>
-      </div>
-      <div class="card">
-        <h4>Checklist operativo</h4>
-        <div class="row">
-          <label><input type="checkbox" checked /> Acta suscrita</label>
-          <label><input type="checkbox" checked /> Verificación CRT</label>
-          <label><input type="checkbox" /> Referencia OSD</label>
-        </div>
-      </div>
-      <div class="card">
-        <h4>Archivos cargados</h4>
+        <div class="catalog-scroll">
         <table>
-          <thead><tr><th>Archivo</th><th>Región</th><th>Departamento</th><th>Descripción evidencia (nivel 2)</th><th>Subido por</th><th>Fecha</th><th>Acción</th></tr></thead>
-          <tbody>
-            <tr>
-              <td>acta_crt_valle.pdf</td>
-              <td>TPS</td>
-              <td>Valle</td>
-              <td>Acta verificación CRT Valle — Simulacro I.</td>
-              <td>jrocha</td>
-              <td>2026-02-11 14:22</td>
-              <td><button class="btn-view-file" data-file="acta_crt_valle.pdf" data-desc="Acta verificación CRT Valle — Simulacro I.">Ver</button></td>
-            </tr>
-            <tr>
-              <td>acta_crt_antioquia.pdf</td>
-              <td>ASD</td>
-              <td>Antioquia</td>
-              <td>Acta verificación CRT Antioquia — Simulacro I.</td>
-              <td>coord.crt</td>
-              <td>2026-02-12 09:10</td>
-              <td><button class="btn-view-file" data-file="acta_crt_antioquia.pdf" data-desc="Acta verificación CRT Antioquia — Simulacro I.">Ver</button></td>
-            </tr>
-          </tbody>
+          <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Evidencias</th><th>Acción</th></tr></thead>
+          <tbody id="catalog-tbody"></tbody>
         </table>
-        <div class="row" style="margin-top:10px;">
-          <button id="btn-open-upload" class="primary">Subir archivos</button>
-          <button>Agregar nota interna</button>
         </div>
-        <div class="row" style="margin-top:10px;">
-          <input style="min-width:320px;" placeholder="Descripción de evidencia (nivel 2): p.ej. Lista asistencia Bogotá jornada 2" />
-          <button>Guardar descripción de evidencia</button>
+      </div>
+    </section>
+
+    <section id="detalle" class="view hidden">
+      <!-- Vista cargador: sube evidencias y envía anexo a revisión -->
+      <div id="detalle-vista-cargador">
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <button type="button" id="btn-detalle-volver-anexos">← Volver a Anexos</button>
+            <span class="role-banner cargador">Rol: Cargador de evidencias</span>
+          </div>
+          <div class="row">
+            <h3 style="margin:0;">Anexo 02 — Acta de verificación implementación CRT - OSD</h3>
+            <span class="pill">En proceso</span>
+          </div>
+          <p class="small">Sube <strong>evidencias</strong> (archivos) asociadas a este anexo, cada una con región y departamento. Evento: Simulacro I</p>
+        </div>
+        <div class="card">
+          <h4>Ficha del anexo (nivel 1: descripción general)</h4>
+          <p class="small">Descripción general del anexo en catálogo. Puedes editarla directamente y guardar los cambios.</p>
+          <textarea id="catalog-description">Anexo 02: acta de verificación de implementación en Centros de Recepción Telefónica (CRT) y Oficinas de Seguimiento Departamental (OSD). Las evidencias se reciben por departamento y se consolidan en un único entregable del anexo.</textarea>
+          <div class="row" style="margin-top:10px;">
+            <button type="button" id="btn-save-catalog" class="primary">Guardar ficha</button>
+            <span id="catalog-save-status" class="pill ok hidden">Ficha guardada</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Evidencias del anexo</h4>
+          <p class="small">Listado de evidencias que componen este anexo. Cada fila es un archivo aportado por un departamento.</p>
+          <table>
+            <thead><tr><th>Evidencia</th><th>Región</th><th>Departamento</th><th>Descripción (nivel 2)</th><th>Subido por</th><th>Fecha</th><th>Acción</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>acta_crt_valle.pdf</td>
+                <td>TPS</td>
+                <td>Valle</td>
+                <td>Acta verificación CRT Valle — Simulacro I.</td>
+                <td>jrocha</td>
+                <td>2026-02-11 14:22</td>
+                <td><button type="button" class="btn-view-file" data-file="acta_crt_valle.pdf" data-desc="Acta verificación CRT Valle — Simulacro I.">Ver</button></td>
+              </tr>
+              <tr>
+                <td>acta_crt_antioquia.pdf</td>
+                <td>ASD</td>
+                <td>Antioquia</td>
+                <td>Acta verificación CRT Antioquia — Simulacro I.</td>
+                <td>coord.crt</td>
+                <td>2026-02-12 09:10</td>
+                <td><button type="button" class="btn-view-file" data-file="acta_crt_antioquia.pdf" data-desc="Acta verificación CRT Antioquia — Simulacro I.">Ver</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row" style="margin-top:10px;">
+            <button type="button" id="btn-open-upload" class="primary">Subir evidencia</button>
+          </div>
+          <div class="row" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);">
+            <div class="spacer"></div>
+            <button type="button" id="btn-send-anexo-review">Enviar anexo a revisión</button>
+            <span id="anexo-review-status" class="pill hidden">Anexo enviado a revisión</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista revisor: revisa evidencias y decide sobre el anexo -->
+      <div id="detalle-vista-revisor" class="hidden">
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <button type="button" id="btn-detalle-volver-revision">← Volver a Revisión</button>
+            <span class="role-banner revisor">Rol: Revisor</span>
+          </div>
+          <div class="row">
+            <h3 style="margin:0;">Anexo 02 — Acta de verificación implementación CRT - OSD</h3>
+            <span class="pill warn">En revisión</span>
+          </div>
+          <p class="small">Revisa evidencias por departamento y registra la decisión del anexo. Evento: Simulacro I</p>
+        </div>
+        <div class="card">
+          <h4>Ficha del anexo (referencia)</h4>
+          <p class="small">Descripción de catálogo — solo consulta durante la revisión.</p>
+          <textarea disabled>Anexo 02: acta de verificación de implementación en Centros de Recepción Telefónica (CRT) y Oficinas de Seguimiento Departamental (OSD). Las evidencias se reciben por departamento y se consolidan en un único entregable del anexo.</textarea>
+        </div>
+        <div class="card">
+          <h4>Resumen: evidencias del anexo por departamento</h4>
+          <p class="small">Vista agregada del <strong>mismo anexo</strong>: cuántas evidencias aportó cada departamento. Si falta un territorio, el anexo puede estar incompleto. El detalle de cada evidencia está en la tabla siguiente.</p>
+          <table>
+            <thead><tr><th>Región</th><th>Departamento</th><th>Evidencias del anexo</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>TPS</td><td>Valle</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
+              <tr><td>ASD</td><td>Antioquia</td><td>1</td><td><span class="pill ok">OK</span></td></tr>
+              <tr><td>TPS</td><td>Cundinamarca</td><td>0</td><td><span class="pill bad">Pendiente</span></td></tr>
+              <tr><td>TPS</td><td>Bogotá D.C.</td><td>0</td><td><span class="pill warn">En curso</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h4>Listado de evidencias del anexo</h4>
+          <p class="small">Cada fila es una evidencia (archivo) que aporta a este anexo. Revise el contenido antes de aprobar o devolver el anexo completo.</p>
+          <table>
+            <thead><tr><th>Evidencia</th><th>Región</th><th>Departamento</th><th>Descripción</th><th>Subido por</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>acta_crt_valle.pdf</td>
+                <td>TPS</td>
+                <td>Valle</td>
+                <td>Acta verificación CRT Valle — Simulacro I.</td>
+                <td>jrocha</td>
+                <td>2026-02-11 14:22</td>
+                <td><span class="pill ok">Aprobada</span></td>
+                <td>
+                  <button type="button" class="btn-view-file" data-file="acta_crt_valle.pdf" data-desc="Acta verificación CRT Valle — Simulacro I.">Ver</button>
+                  <button type="button">Rechazar evidencia</button>
+                </td>
+              </tr>
+              <tr>
+                <td>acta_crt_antioquia.pdf</td>
+                <td>ASD</td>
+                <td>Antioquia</td>
+                <td>Acta verificación CRT Antioquia — Simulacro I.</td>
+                <td>coord.crt</td>
+                <td>2026-02-12 09:10</td>
+                <td><span class="pill warn">Pendiente</span></td>
+                <td>
+                  <button type="button" class="btn-view-file" data-file="acta_crt_antioquia.pdf" data-desc="Acta verificación CRT Antioquia — Simulacro I.">Ver</button>
+                  <button type="button">Rechazar evidencia</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="border-color:#d4a574; background:#fffdfb;">
+          <h4>Decisión sobre el anexo</h4>
+          <p class="small">Las observaciones son obligatorias al devolver el anexo al cargador.</p>
+          <textarea id="revisor-observaciones" placeholder="Observaciones del revisor (obligatorias al devolver)…" style="min-height:88px;"></textarea>
+          <div class="row" style="margin-top:12px;">
+            <button type="button" class="primary">Aprobar anexo</button>
+            <button type="button">Devolver con observaciones</button>
+            <button type="button">Solicitar evidencia adicional</button>
+          </div>
         </div>
       </div>
     </section>
@@ -407,37 +606,11 @@
         <ul>
           <li><span class="pill ok">OK</span> Estructura 01..70 completa</li>
           <li><span class="pill ok">OK</span> Nombres de carpeta oficiales</li>
-          <li><span class="pill ok">OK</span> Anexos cerrados incluidos</li>
-          <li><span class="pill warn">Atención</span> 5 anexos siguen en "En construcción"</li>
+          <li><span class="pill ok">OK</span> Anexos aprobados incluidos</li>
+          <li><span class="pill warn">Atención</span> 5 anexos siguen en "En proceso"</li>
         </ul>
+        <p class="small">Al generar el ZIP, el sistema arma automáticamente cada carpeta <code>01…70</code> con las evidencias <strong>aprobadas</strong> (copia, merge o estructura acordada por tipo de anexo). No hay paso manual de consolidado en pantalla.</p>
         <p class="small">Salida esperada: <b>Anexos_Preconteo_Congreso_2026-02-12.zip</b></p>
-      </div>
-    </section>
-
-    <section id="config" class="view hidden">
-      <div class="card config-card-accent">
-        <h3>Configuración mínima</h3>
-        <table>
-          <thead><tr><th>Parámetro</th><th>Valor</th><th>Acción</th></tr></thead>
-          <tbody>
-            <tr><td>Catálogo de anexos (70)</td><td>Bloqueado por defecto</td><td><button>Ver</button></td></tr>
-            <tr><td>Checklist por anexo</td><td>Editable</td><td><button>Editar</button></td></tr>
-            <tr><td>Estados de flujo</td><td>pendiente / construcción / revisión / cerrado</td><td><button>Editar</button></td></tr>
-            <tr><td>Roles</td><td>cargador / revisor / admin</td><td><button>Editar</button></td></tr>
-            <tr><td>Reglas exportación</td><td>Solo cerrados (default)</td><td><button>Editar</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card config-card-accent">
-        <h4>Reglas documentales (3 niveles)</h4>
-        <table>
-          <thead><tr><th>Nivel</th><th>Qué se configura</th><th>Dónde se usa</th></tr></thead>
-          <tbody>
-            <tr><td>1. Descripción general del anexo</td><td>Ficha del catálogo por anexo (texto guía)</td><td>Vista detalle (Abrir / Revisar; listados en 1) Dashboard y 2) Anexos)</td></tr>
-            <tr><td>2. Descripción de evidencia</td><td>Región + departamento + descripción por archivo</td><td>Modal Subir evidencia en detalle de anexo</td></tr>
-            <tr><td>3. Texto narrativo del informe</td><td>Plantillas por sección; citas «Ver Anexo XX» validadas contra evidencias</td><td>3) Redacción (texto) · 5) Informe PDF (resumen + validación) · 6) Revisión (rol revisor)</td></tr>
-          </tbody>
-        </table>
       </div>
     </section>
 
@@ -450,7 +623,7 @@
           <button type="button" id="btn-go-redaccion" class="primary">Ir a redactar sección</button>
           <button type="button" class="primary">Exportar PDF Cap. VIII</button>
         </div>
-        <p class="small" style="margin:12px 0 0;">Esta pestaña concentra <strong>cómo va el armado</strong>: relación sección ↔ anexos, validación de citas <strong>Ver Anexo XX</strong> frente a evidencias, índice del capítulo con estado por apartado y exportación final. El texto narrativo y borrador / envío a revisión por sección están en <strong>3) Redacción informe</strong>.</p>
+        <p class="small" style="margin:12px 0 0;">Esta pestaña concentra <strong>cómo va el armado</strong>: relación sección ↔ anexos, índice del capítulo con estado por apartado y exportación final. El texto narrativo y borrador / envío a revisión por sección están en <strong>2) Redacción informe</strong>.</p>
       </div>
       <div class="card">
         <h4>Relación sección ↔ anexos (ejemplo)</h4>
@@ -472,126 +645,89 @@
         <p class="small">Una sección del informe puede referenciar varios anexos, y un mismo anexo puede aparecer en más de una sección si el relato lo requiere.</p>
       </div>
       <div class="card">
-        <h4>Validación de referencias “Ver Anexo XX”</h4>
-        <p class="small">Avance del cruce entre las citas del borrador y el estado de evidencias en el recolector (mock: fijo para <strong>6. CAPACITACIÓN</strong>; el texto fuente se edita en <strong>3) Redacción informe</strong>).</p>
-        <table>
-          <thead><tr><th>Referencia</th><th>Estado</th><th>Detalle</th></tr></thead>
-          <tbody>
-            <tr><td>Ver Anexo 05</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
-            <tr><td>Ver Anexo 23</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
-            <tr><td>Ver Anexo 24</td><td><span class="pill warn">Alerta</span></td><td>Sin archivo aprobado</td></tr>
-            <tr><td>Ver Anexo 07</td><td><span class="pill ok">OK</span></td><td>Evidencia cargada</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card">
         <h4>Progreso por secciones</h4>
-        <p class="small">Estructura alineada al <strong>Contenido</strong> de <em>Congreso Inf. Cap. VIII — Preconteo — Comunicaciones</em> (índice págs. 2–3 del PDF). El estado resume evidencias vinculadas y borrador por apartado; la edición del texto y el envío a revisión por sección se hacen en <strong>3) Redacción informe</strong>. Las citas «Ver Anexo» se validan en el bloque anterior.</p>
-        <div class="toc-scroll" aria-label="Índice del informe Capítulo VIII">
-          <div class="toc-row main"><span class="toc-label">DESCRIPCIÓN DEL SERVICIO</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.4</span></span></div>
-          <div class="toc-row main"><span class="toc-label">1. ALCANCE</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.4</span></span></div>
-          <div class="toc-row main"><span class="toc-label">2. FUNCIONALIDADES DE LA SOLUCIÓN INFORMÁTICA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.9</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">a) En los puestos de votación</span><span><span class="pill ok">OK</span> <span class="toc-page">p.9</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">b) En los Centros de Recepción Telefónica (CRT)</span><span><span class="pill ok">OK</span> <span class="toc-page">p.10</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">c) En el Data Center</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.11</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">d) En el Centro de Control</span><span><span class="pill ok">OK</span> <span class="toc-page">p.13</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">e) En las oficinas de seguimiento departamental</span><span><span class="pill ok">OK</span> <span class="toc-page">p.14</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">f) Diagrama General</span><span><span class="pill ok">OK</span> <span class="toc-page">p.14</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">g) Software — Procesamiento de Datos Electorales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.16</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">h) Software — Digitalización, interpretación y verificación</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.30</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">i) Software de Preconteo para Consulados</span><span><span class="pill ok">OK</span> <span class="toc-page">p.34</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">j) Continuidad del Procesamiento de Datos</span><span><span class="pill ok">OK</span> <span class="toc-page">p.38</span></span></div>
-          <div class="toc-row main"><span class="toc-label">3. PLAN DE COMUNICACIONES PARA EL PROCESO DE PRECONTEO</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.39</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">a) Elementos de comunicaciones administrativos transversales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.48</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">b) Plan de Comunicaciones Proceso de Preconteo Electoral</span><span><span class="pill ok">OK</span> <span class="toc-page">p.54</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">c) Red de Datos Electoral Preconteo</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.74</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">d) Canales de Internet</span><span><span class="pill ok">OK</span> <span class="toc-page">p.83</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">e) Seguridad informática en la Red de Datos de Preconteo</span><span><span class="pill ok">OK</span> <span class="toc-page">p.84</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">f) Canales de Interconexión</span><span><span class="pill ok">OK</span> <span class="toc-page">p.85</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">g) Plataforma Infocandidatos — Congreso de la República</span><span><span class="pill bad">Falta anexo</span> <span class="toc-page">p.86</span></span></div>
-          <div class="toc-row main"><span class="toc-label">4. REQUERIMIENTO LOGÍSTICA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.87</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">a) Transmisión y Recepción de Datos Electorales</span><span><span class="pill ok">OK</span> <span class="toc-page">p.87</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">b) Requerimiento para las Salas de Prensa Departamentales</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.92</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">c) Recurso Humano</span><span><span class="pill ok">OK</span> <span class="toc-page">p.95</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">d) Recurso Humano para Salas de Prensa</span><span><span class="pill ok">OK</span> <span class="toc-page">p.97</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">e) Otros Requerimientos de Logística</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.99</span></span></div>
-          <div class="toc-row main"><span class="toc-label">5. INFRAESTRUCTURA</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.105</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">a) Infraestructura física</span><span><span class="pill ok">OK</span> <span class="toc-page">p.105</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">b) Centros de Recepción Telefónica (CRT)</span><span><span class="pill ok">OK</span> <span class="toc-page">p.105</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">c) Requerimientos técnicos de los CRT</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.110</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">d) Seguridad Física en CRT</span><span><span class="pill ok">OK</span> <span class="toc-page">p.112</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">e) Infraestructura Tecnológica</span><span><span class="pill warn">Pendiente</span> <span class="toc-page">p.115</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">f) Oficinas de Seguimiento Departamentales</span><span><span class="pill ok">OK</span> <span class="toc-page">p.116</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">g) Centro de Control</span><span><span class="pill ok">OK</span> <span class="toc-page">p.118</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">h) Salas de Prensa</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.120</span></span></div>
-          <div class="toc-row main"><span class="toc-label">6. CAPACITACIÓN</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.126</span></span></div>
-          <div class="toc-row main"><span class="toc-label">7. INTEROPERABILIDAD</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.128</span></span></div>
-          <div class="toc-row main"><span class="toc-label">8. PRUEBAS FUNCIONALES, TÉCNICAS, DE ESPECIFICACIONES Y SIMULACRO</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.128</span></span></div>
-          <div class="toc-row main"><span class="toc-label">9. METAS PARA EL PROCESAMIENTO DE INFORMACIÓN</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.134</span></span></div>
-          <div class="toc-row main"><span class="toc-label">10. AUDITORÍAS</span><span><span class="pill ok">Listo</span> <span class="toc-page">p.141</span></span></div>
-          <div class="toc-row main"><span class="toc-label">11. ENTREGABLES</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.141</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">a) Entregables del Proceso por la UT ILE 2026</span><span><span class="pill warn">En curso</span> <span class="toc-page">p.141</span></span></div>
-          <div class="toc-row sub"><span class="toc-label">b) Actas a Suscribir</span><span><span class="pill ok">OK</span> <span class="toc-page">p.143</span></span></div>
-        </div>
+        <p class="small">Un capítulo = una fila (1–11), alineado con <strong>2) Redacción informe</strong>. El detalle a, b, c… del PDF no se replica aquí: dentro de cada capítulo el redactor arma los <strong>segmentos</strong> que necesite. El estado resume borrador, revisión o aprobación del capítulo completo.</p>
+        <table>
+          <thead><tr><th>Capítulo</th><th>Estado</th></tr></thead>
+          <tbody id="informe-chapters-tbody"></tbody>
+        </table>
       </div>
     </section>
 
     <section id="revision" class="view hidden revision-view">
       <div class="card revision-card-accent">
         <div class="row">
-          <h3 style="margin:0;">Cola de revisión</h3>
-          <span class="pill" style="border-color:#c4783a;color:#f0c4a0;background:rgba(196,120,58,0.15);">Rol revisor · pestaña 6</span>
+          <h3 style="margin:0;">Cola de anexos</h3>
+          <span class="pill" style="border-color:#c4783a;color:#92400e;background:#fff8f0;">Rol revisor · pestaña 5</span>
         </div>
+        <p class="small">Evidencias del paquete 01–70: el cargador envía el anexo; el revisor aprueba o devuelve en el detalle.</p>
         <table>
-          <thead><tr><th>Anexo</th><th>Sede</th><th>Evento</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <thead><tr><th>Anexo</th><th>Ámbito</th><th>Evento</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
           <tbody>
-            <tr><td>02</td><td>CRT Antioquia</td><td>Simulacro I</td><td>coord.crt</td><td>2026-02-12 09:10</td><td><button type="button" class="btn-go-detalle">Revisar</button></td></tr>
-            <tr><td>28</td><td>Casa Matriz</td><td>Prueba matriz</td><td>lider.pruebas</td><td>2026-02-12 09:44</td><td><button type="button" class="btn-go-detalle">Revisar</button></td></tr>
+            <tr><td>02</td><td>CRT Antioquia</td><td>Simulacro I</td><td>coord.crt</td><td>2026-02-12 09:10</td><td><button type="button" class="btn-go-detalle" data-from="revision">Revisar</button></td></tr>
+            <tr><td>28</td><td>Casa Matriz</td><td>Prueba matriz</td><td>lider.pruebas</td><td>2026-02-12 09:44</td><td><button type="button" class="btn-go-detalle" data-from="revision">Revisar</button></td></tr>
           </tbody>
         </table>
-        <p class="small"><strong>Revisar</strong> abre el detalle del anexo (misma vista que <strong>Abrir</strong> en Dashboard o <strong>2) Anexos</strong>; mock: Anexo 28). En producción esta vista suele mostrarse solo a usuarios con rol <strong>revisor</strong> o <strong>admin</strong>.</p>
       </div>
       <div class="card revision-card-accent">
-        <h4>Decisión de revisión (mock)</h4>
-        <textarea placeholder="Observaciones del revisor..."></textarea>
-        <div class="row" style="margin-top:10px;">
-          <button class="primary">Aprobar anexo</button>
-          <button>Devolver con observaciones</button>
-        </div>
+        <h3 style="margin-top:0;">Cola de redacción del informe</h3>
+        <p class="small">Texto narrativo Cap. VIII: el redactor envía la <strong>sección</strong> (capítulo + segmentos); otro revisor valida redacción y referencias «Ver anexo» antes de aprobar la sección.</p>
+        <table>
+          <thead><tr><th>Sección</th><th>Segmentos</th><th>Solicitó</th><th>Fecha</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>6. CAPACITACIÓN</td><td>4</td><td>coord.comunicaciones</td><td>2026-02-11 16:30</td><td><button type="button" class="btn-go-section-review" data-section="cap6">Revisar</button></td></tr>
+            <tr><td>8. PRUEBAS FUNCIONALES…</td><td>3</td><td>lider.pruebas</td><td>2026-02-12 11:05</td><td><button type="button" class="btn-go-section-review" data-section="cap8">Revisar</button></td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
     <section id="redaccion" class="view hidden">
       <div class="card">
-        <div class="row">
-          <h3 style="margin:0;">Redacción informe — Cap. VIII</h3>
-          <span class="pill warn">Nivel 3 · narrativo</span>
-          <div class="spacer"></div>
-          <label class="small" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            Sección activa
-            <select id="section-select" style="min-width:220px;">
-              <option>DESCRIPCIÓN DEL SERVICIO</option>
-              <option selected>6. CAPACITACIÓN</option>
-              <option>11. ENTREGABLES — a) Entregables UT ILE 2026</option>
-            </select>
-          </label>
-          <button type="button">Guardar borrador</button>
-          <button type="button" id="btn-send-section-review">Enviar sección a revisión</button>
-          <span id="section-review-status" class="pill hidden">Sección enviada a revisión</span>
+        <div id="redaccion-toolbar-redactor">
+          <div class="row">
+            <h3 style="margin:0;">Redacción informe — Cap. VIII</h3>
+            <span class="pill warn">Nivel 3 · narrativo</span>
+            <div class="spacer"></div>
+            <label class="small" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              Sección activa
+              <select id="section-select" style="min-width:280px; max-width:100%;"></select>
+            </label>
+            <button type="button">Guardar borrador</button>
+            <button type="button" id="btn-send-section-review">Enviar sección a revisión</button>
+            <span id="section-review-status" class="pill hidden">Sección enviada a revisión</span>
+          </div>
+          <p class="small" style="margin:10px 0 0;">
+            <button type="button" id="btn-go-informe">← Ver resumen de armado (pestaña 4)</button>
+            · Colas del revisor en <strong>5) Revisión</strong> (anexos y redacción).
+          </p>
         </div>
-        <p class="small" style="margin:10px 0 0;">
-          <button type="button" id="btn-go-informe">← Ver resumen de armado (pestaña 5)</button>
-          · Tablero de índice, sección ↔ anexos y validación «Ver Anexo» en <strong>5) Informe PDF</strong>. Listado de anexos: <strong>1) Dashboard</strong> o <strong>2) Anexos</strong>. Cola de anexos: <strong>6) Revisión</strong> (revisor).
-        </p>
+        <div id="redaccion-toolbar-revisor" class="hidden">
+          <div class="row" style="margin-bottom:10px;">
+            <button type="button" id="btn-redaccion-volver-revision">← Volver a Revisión</button>
+            <span class="role-banner revisor">Rol: Revisor · redacción informe</span>
+          </div>
+          <div class="row">
+            <h3 style="margin:0;">Revisión de sección — <span id="section-review-title">8. PRUEBAS FUNCIONALES, TÉCNICAS, DE ESPECIFICACIONES Y SIMULACRO</span></h3>
+            <span class="pill warn">En revisión</span>
+          </div>
+          <p class="small">Valida segmentos, redacción y anexos citados. La decisión aplica a toda la sección del informe.</p>
+        </div>
       </div>
-      <div class="card">
-        <h4>Editor de sección — <span id="section-editor-title">6. CAPACITACIÓN</span></h4>
-        <textarea id="section-editor-body">La UT ILE 2026 garantizó las siguientes actividades:
-
-1. Planificó, diseñó e implementó un plan de capacitación... Ver Anexo 05.
-2. Impartió capacitación sobre el proceso... Ver Anexo 23.
-3. Impartió capacitación al personal RNEC... Ver Anexo 24.
-5. Se entregó kit didáctico... Ver Anexo 07.</textarea>
+      <div class="card" id="redaccion-editor-card">
+        <h4 id="section-editor-heading">Editor de sección — <span id="section-editor-title">8. PRUEBAS FUNCIONALES, TÉCNICAS, DE ESPECIFICACIONES Y SIMULACRO</span></h4>
+        <p class="small" id="section-editor-help">Cada capítulo se redacta en <strong>segmentos</strong> numerados. Por segmento: un campo de texto libre y anexos vinculados con «Ver anexo».</p>
+        <div id="segments-list"></div>
+        <button type="button" id="btn-add-segment">+ Agregar segmento</button>
+      </div>
+      <div id="redaccion-decision-panel" class="card hidden" style="border-color:#d4a574; background:#fffdfb;">
+        <h4>Decisión sobre la sección</h4>
+        <p class="small">Valida redacción, segmentos y anexos citados en la sección. Observaciones obligatorias al devolver.</p>
+        <textarea id="section-reviewer-notes" placeholder="Observaciones del revisor sobre la redacción…" style="min-height:88px;"></textarea>
+        <div class="row" style="margin-top:12px;">
+          <button type="button" class="primary">Aprobar sección</button>
+          <button type="button">Devolver con observaciones</button>
+        </div>
       </div>
     </section>
   </div>
@@ -605,11 +741,41 @@
       </div>
       <p class="small">Archivo seleccionado</p>
       <input id="file-name" disabled style="width:100%; margin-bottom:10px;" />
+      <p class="small">Vista previa de la evidencia</p>
+      <div class="evidence-preview" aria-label="Vista previa mock del documento">
+        <svg viewBox="0 0 640 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <rect width="640" height="440" fill="#f8fafc"/>
+          <rect x="24" y="24" width="592" height="392" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+          <rect x="48" y="48" width="544" height="36" rx="2" fill="#122459" opacity="0.08"/>
+          <text x="320" y="72" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#122459">ACTA DE VERIFICACIÓN — CRT / OSD</text>
+          <text x="48" y="108" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b">Documento de evidencia · Simulacro Preconteo I · Mock de vista previa</text>
+          <line x1="48" y1="118" x2="592" y2="118" stroke="#e2e8f0"/>
+          <rect x="48" y="132" width="120" height="10" rx="2" fill="#e2e8f0"/>
+          <rect x="48" y="152" width="480" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="168" width="520" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="184" width="460" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="200" width="500" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="228" width="200" height="10" rx="2" fill="#e2e8f0"/>
+          <rect x="48" y="248" width="540" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="264" width="510" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="280" width="480" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="48" y="308" width="160" height="72" rx="4" fill="#f1f5f9" stroke="#e2e8f0" stroke-dasharray="4 3"/>
+          <text x="128" y="352" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="9" fill="#94a3b8">Sello / firma</text>
+          <rect x="240" y="308" width="348" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="240" y="324" width="320" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="240" y="340" width="300" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="240" y="356" width="280" height="8" rx="2" fill="#f1f5f9"/>
+          <rect x="240" y="372" width="260" height="8" rx="2" fill="#f1f5f9"/>
+        </svg>
+      </div>
       <p class="small">Descripción de evidencia (nivel 2)</p>
       <textarea id="file-description"></textarea>
-      <div class="row" style="margin-top:10px;">
-        <button class="primary">Guardar descripción</button>
-        <button>Aprobar evidencia</button>
+      <div id="file-modal-cargador-actions" class="row" style="margin-top:10px;">
+        <button type="button" class="primary">Guardar descripción</button>
+      </div>
+      <div id="file-modal-revisor-actions" class="row hidden" style="margin-top:10px;">
+        <button type="button" class="primary">Aprobar evidencia</button>
+        <button type="button">Rechazar evidencia</button>
       </div>
     </div>
   </div>
@@ -639,31 +805,11 @@
       <div class="row" style="margin-top:10px;">
         <button id="btn-upload-save" class="primary">Subir y guardar</button>
       </div>
-      <p id="upload-error" class="small" style="color:#ff9fb3; display:none;"></p>
+      <p id="upload-error" class="small" style="color:#b91c1c; display:none;"></p>
     </div>
   </div>
 
-  <div id="request-modal" class="modal-backdrop">
-    <div class="modal">
-      <div class="row">
-        <h3 style="margin:0;">Solicitar ajuste de ficha de anexo</h3>
-        <div class="spacer"></div>
-        <button id="btn-close-request-modal">Cerrar</button>
-      </div>
-      <p class="small">La descripción de catálogo es de solo lectura para este rol. Envía solicitud al administrador documental.</p>
-      <p class="small">Descripción actual</p>
-      <textarea disabled>Anexo 02: acta de verificación CRT/OSD; evidencias por departamento consolidadas en un único entregable del anexo.</textarea>
-      <p class="small">Propuesta de ajuste</p>
-      <textarea id="request-proposal" placeholder="Propón el texto ajustado para la ficha del anexo..."></textarea>
-      <p class="small">Justificación</p>
-      <textarea id="request-reason" placeholder="Explica por qué debe modificarse (lineamiento, oficio, cambio operativo, etc.)"></textarea>
-      <div class="row" style="margin-top:10px;">
-        <button id="btn-send-request" class="primary">Enviar solicitud</button>
-      </div>
-      <p id="request-error" class="small" style="color:#ff9fb3; display:none;">Debes completar propuesta y justificación.</p>
-    </div>
-  </div>
-
+  <script src="annex-catalog.js"></script>
   <script>
     const tabs = document.querySelectorAll(".tab");
     const views = document.querySelectorAll(".view");
@@ -678,31 +824,364 @@
     }
 
     tabs.forEach((t) => {
-      t.addEventListener("click", () => switchTab(t.dataset.tab));
-    });
-
-    document.getElementById("btn-go-redaccion").addEventListener("click", () => switchTab("redaccion"));
-    document.getElementById("btn-go-informe").addEventListener("click", () => switchTab("informe"));
-
-    document.querySelectorAll(".btn-go-detalle").forEach((btn) => {
-      btn.addEventListener("click", () => switchTab("detalle"));
-    });
-
-    document.getElementById("btn-detalle-volver-dashboard").addEventListener("click", () => switchTab("dashboard"));
-    document.getElementById("btn-detalle-volver-anexos").addEventListener("click", () => switchTab("anexos"));
-    document.getElementById("btn-detalle-volver-revision").addEventListener("click", () => switchTab("revision"));
-
-    document.querySelectorAll("[data-menu-mock]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("[data-menu-mock]").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
+      t.addEventListener("click", () => {
+        if (t.dataset.tab === "redaccion") setRedaccionModo("redactor");
+        switchTab(t.dataset.tab);
       });
     });
 
+    document.getElementById("btn-go-redaccion").addEventListener("click", () => {
+      setRedaccionModo("redactor");
+      switchTab("redaccion");
+    });
+    document.getElementById("btn-go-informe").addEventListener("click", () => switchTab("informe"));
+
+    let detalleRol = "cargador";
+
+    function padAnnexNum(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function pillClass(pill) {
+      return pill ? `pill ${pill}` : "pill";
+    }
+
+    function renderCatalog(filterText) {
+      const tbody = document.getElementById("catalog-tbody");
+      const q = (filterText || "").trim().toLowerCase();
+      tbody.innerHTML = "";
+      ANNEX_CATALOG.filter((a) => {
+        if (!q) return true;
+        const num = padAnnexNum(a.num);
+        return num.includes(q) || a.name.toLowerCase().includes(q) || String(a.num).includes(q);
+      }).forEach((a) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${padAnnexNum(a.num)}</td>
+          <td>${a.name}</td>
+          <td><span class="${pillClass(a.pill)}">${a.state}</span></td>
+          <td>${a.evidences}</td>
+          <td><button type="button" class="btn-go-detalle" data-annex-num="${a.num}">Abrir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateCatalogKpis() {
+      const counts = { Aprobado: 0, Revisión: 0, "En proceso": 0, Pendiente: 0 };
+      ANNEX_CATALOG.forEach((a) => {
+        if (counts[a.state] !== undefined) counts[a.state] += 1;
+      });
+      const kpiCards = document.querySelectorAll("#anexos .kpi .card h3");
+      if (kpiCards.length >= 4) {
+        kpiCards[0].textContent = `${counts.Aprobado} / 70`;
+        kpiCards[1].textContent = String(counts.Revisión);
+        kpiCards[2].textContent = String(counts["En proceso"]);
+        kpiCards[3].textContent = String(counts.Pendiente);
+      }
+    }
+
+    function populateAvanceSelect() {
+      const sel = document.getElementById("avance-anexo-select");
+      sel.innerHTML = "";
+      ANNEX_CATALOG.forEach((a) => {
+        const opt = document.createElement("option");
+        opt.value = padAnnexNum(a.num);
+        opt.textContent = `${padAnnexNum(a.num)}. ${a.name}`;
+        if (a.num === 2) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    }
+
+    renderCatalog();
+    updateCatalogKpis();
+    populateAvanceSelect();
+
+    document.getElementById("catalog-search").addEventListener("input", (e) => {
+      renderCatalog(e.target.value);
+    });
+
+    document.addEventListener("click", (e) => {
+      const btnDetalle = e.target.closest(".btn-go-detalle");
+      if (btnDetalle) {
+        detalleRol = btnDetalle.dataset.from === "revision" ? "revisor" : "cargador";
+        document.getElementById("detalle-vista-cargador").classList.toggle("hidden", detalleRol !== "cargador");
+        document.getElementById("detalle-vista-revisor").classList.toggle("hidden", detalleRol !== "revisor");
+        switchTab("detalle");
+        return;
+      }
+      const btnSection = e.target.closest(".btn-go-section-review");
+      if (btnSection && btnSection.id !== "btn-send-section-review") {
+        const key = btnSection.dataset.section || "cap8";
+        sectionSelect.value = key;
+        sectionSelect.dispatchEvent(new Event("change"));
+        setRedaccionModo("revisor");
+        switchTab("redaccion");
+      }
+    });
+
+    document.getElementById("btn-detalle-volver-anexos").addEventListener("click", () => switchTab("anexos"));
+    document.getElementById("btn-detalle-volver-revision").addEventListener("click", () => switchTab("revision"));
+
     const sectionSelect = document.getElementById("section-select");
     const sectionEditorTitle = document.getElementById("section-editor-title");
+    const segmentsList = document.getElementById("segments-list");
+
+    const REPORT_CHAPTERS = [
+      { id: "cap1", label: "1. ALCANCE", status: "Aprobada", pill: "ok" },
+      { id: "cap2", label: "2. FUNCIONALIDADES DE LA SOLUCIÓN INFORMÁTICA", status: "En proceso", pill: "" },
+      { id: "cap3", label: "3. PLAN DE COMUNICACIONES PARA EL PROCESO DE PRECONTEO", status: "En proceso", pill: "" },
+      { id: "cap4", label: "4. REQUERIMIENTO LOGÍSTICA", status: "Pendiente", pill: "bad" },
+      { id: "cap5", label: "5. INFRAESTRUCTURA", status: "En proceso", pill: "" },
+      { id: "cap6", label: "6. CAPACITACIÓN", status: "En revisión", pill: "warn" },
+      { id: "cap7", label: "7. INTEROPERABILIDAD", status: "Aprobada", pill: "ok" },
+      { id: "cap8", label: "8. PRUEBAS FUNCIONALES, TÉCNICAS, DE ESPECIFICACIONES Y SIMULACRO", status: "En revisión", pill: "warn" },
+      { id: "cap9", label: "9. METAS PARA EL PROCESAMIENTO DE INFORMACIÓN", status: "Aprobada", pill: "ok" },
+      { id: "cap10", label: "10. AUDITORÍAS", status: "Aprobada", pill: "ok" },
+      { id: "cap11", label: "11. ENTREGABLES", status: "En proceso", pill: "" },
+    ];
+
+    function renderInformeChapterProgress() {
+      const tbody = document.getElementById("informe-chapters-tbody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      REPORT_CHAPTERS.forEach((ch) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${ch.label}</td>
+          <td><span class="${pillClass(ch.pill)}">${ch.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    renderInformeChapterProgress();
+
+    const SECTION_SEGMENTS = {
+      cap1: [{ text: "", annexes: [] }],
+      cap2: [{ text: "", annexes: [] }],
+      cap3: [{ text: "", annexes: [] }],
+      cap4: [{ text: "", annexes: [] }],
+      cap5: [{ text: "", annexes: [] }],
+      cap6: [
+        {
+          text: "Planificó, diseñó e implementó un plan de capacitación y cronograma para el personal de la UT ILE 2026, de acuerdo con los lineamientos de la RNEC.",
+          annexes: [{ n: "05", label: "Plan de capacitación y cronograma" }],
+        },
+        {
+          text: "Impartió capacitación sobre el proceso de preconteo a los funcionarios de la UT ILE 2026 en las sedes operativas.",
+          annexes: [{ n: "23", label: "Evidencias capacitaciones funcionarios" }],
+        },
+        {
+          text: "Impartió capacitación al personal RNEC vinculado al proceso de preconteo electoral.",
+          annexes: [{ n: "24", label: "Evidencias capacitación personal RNEC" }],
+        },
+        {
+          text: "Se entregó kit didáctico y material de apoyo para las jornadas de capacitación.",
+          annexes: [{ n: "07", label: "Kit didáctico y material de apoyo" }],
+        },
+      ],
+      cap7: [{ text: "", annexes: [] }],
+      cap8: [
+        {
+          text: `Una prueba técnica en casa matriz, con el fin de verificar el correcto funcionamiento de los equipos y aplicaciones informáticas que se utilizan en el proceso de preconteo. En esta prueba se realizaron las siguientes actividades:
+
+• Digitalización de FRT'S
+• Procesamiento de datos
+• Generación de reportes
+• Transmisión de datos
+• Recepción de datos
+• Validación de datos
+• Consolidación de resultados
+• Publicación web
+• Monitoreo de red
+• Respaldo de información`,
+          annexes: [
+            { n: "27", label: "Acta prueba de Casa Matriz" },
+            { n: "28", label: "Entregables Casa Matriz" },
+          ],
+        },
+        {
+          text: `Una prueba técnica de funcionalidad con el diez por ciento (10%) de los equipos instalados en los Centros de Recepción Telefónica (CRT) y Oficinas de Seguimiento Departamental (OSD), con el fin de verificar el correcto funcionamiento de los equipos y aplicaciones informáticas.
+
+Nota: La prueba del 10% se realizó en los departamentos seleccionados según el plan de pruebas aprobado por la supervisión.`,
+          annexes: [
+            { n: "29", label: "Acta prueba 10% CRT - OSD" },
+            { n: "30", label: "Entregables prueba 10%" },
+          ],
+        },
+        {
+          text: "Un simulacro de preconteo electoral (Simulacro Preconteo I), con el fin de verificar el correcto funcionamiento de los equipos, aplicaciones informáticas y procedimientos operativos en todas las sedes participantes.",
+          annexes: [
+            { n: "37", label: "Acta Simulacro Preconteo I" },
+            { n: "38", label: "Entregables Simulacro Preconteo I" },
+          ],
+        },
+      ],
+      cap9: [{ text: "", annexes: [] }],
+      cap10: [{ text: "", annexes: [] }],
+      cap11: [
+        {
+          text: "Se entregaron los entregables contractuales de la UT ILE 2026 correspondientes al componente de preconteo, de acuerdo con el cronograma establecido.",
+          annexes: [
+            { n: "20", label: "Entregables generales UT ILE" },
+            { n: "21", label: "Actas de entrega" },
+          ],
+        },
+      ],
+    };
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function annexPillsHtml(annexes) {
+      if (!annexes || !annexes.length) {
+        return '<span class="small" style="color:var(--muted);">Sin anexos vinculados</span>';
+      }
+      return annexes
+        .map((a) => `<span class="pill">${a.n} · ${a.label}</span>`)
+        .join("");
+    }
+
+    function renderSegmentCard(index, seg) {
+      const card = document.createElement("div");
+      card.className = "segment-card";
+      card.innerHTML = `
+        <div class="segment-header">
+          <strong>Segmento ${index}</strong>
+          <div class="segment-actions">
+            <button type="button" class="btn-segment-up" title="Subir">↑</button>
+            <button type="button" class="btn-segment-down" title="Bajar">↓</button>
+            <button type="button" class="btn-segment-remove">Eliminar</button>
+          </div>
+        </div>
+        <div class="segment-field">
+          <textarea class="segment-text" placeholder="Redacte el contenido del segmento (párrafos, listas, notas…)" style="min-height:120px;">${escapeHtml(seg.text || "")}</textarea>
+        </div>
+        <div class="segment-field">
+          <p class="small">Ver anexos</p>
+          <div class="segment-annexes row">${annexPillsHtml(seg.annexes)}</div>
+          <button type="button" class="btn-link-annex" style="margin-top:8px;">+ Vincular anexo</button>
+        </div>
+      `;
+      return card;
+    }
+
+    function renumberSegments() {
+      segmentsList.querySelectorAll(".segment-card").forEach((card, i) => {
+        const label = card.querySelector(".segment-header strong");
+        if (label) label.textContent = `Segmento ${i + 1}`;
+      });
+    }
+
+    function populateSectionSelect() {
+      sectionSelect.innerHTML = "";
+      REPORT_CHAPTERS.forEach((ch) => {
+        const opt = document.createElement("option");
+        opt.value = ch.id;
+        opt.textContent = ch.label;
+        if (ch.id === "cap8") opt.selected = true;
+        sectionSelect.appendChild(opt);
+      });
+    }
+
+    function loadSectionSegments(sectionKey) {
+      const segments = SECTION_SEGMENTS[sectionKey] || [{ text: "", annexes: [] }];
+      segmentsList.innerHTML = "";
+      segments.forEach((seg, i) => {
+        segmentsList.appendChild(renderSegmentCard(i + 1, seg));
+      });
+    }
+
     sectionSelect.addEventListener("change", () => {
-      sectionEditorTitle.textContent = sectionSelect.options[sectionSelect.selectedIndex].text;
+      const key = sectionSelect.value;
+      const title = sectionSelect.options[sectionSelect.selectedIndex].text;
+      sectionEditorTitle.textContent = title;
+      document.getElementById("section-review-title").textContent = title;
+      loadSectionSegments(key);
+      if (redaccionModo === "revisor") setRedaccionModo("revisor");
+    });
+
+    document.getElementById("btn-add-segment").addEventListener("click", () => {
+      segmentsList.appendChild(
+        renderSegmentCard(segmentsList.children.length + 1, {
+          text: "",
+          annexes: [],
+        })
+      );
+      renumberSegments();
+    });
+
+    segmentsList.addEventListener("click", (e) => {
+      const card = e.target.closest(".segment-card");
+      if (!card) return;
+
+      if (e.target.classList.contains("btn-segment-remove")) {
+        if (segmentsList.children.length <= 1) {
+          alert("La sección debe tener al menos un segmento.");
+          return;
+        }
+        card.remove();
+        renumberSegments();
+        return;
+      }
+
+      if (e.target.classList.contains("btn-segment-up")) {
+        const prev = card.previousElementSibling;
+        if (prev) {
+          segmentsList.insertBefore(card, prev);
+          renumberSegments();
+        }
+        return;
+      }
+
+      if (e.target.classList.contains("btn-segment-down")) {
+        const next = card.nextElementSibling;
+        if (next) {
+          segmentsList.insertBefore(next, card);
+          renumberSegments();
+        }
+        return;
+      }
+
+      if (e.target.classList.contains("btn-link-annex")) {
+        alert("Mock: abrir selector de anexos 01–70 para vincular al segmento.");
+      }
+    });
+
+    populateSectionSelect();
+    loadSectionSegments(sectionSelect.value);
+
+    let redaccionModo = "redactor";
+
+    function setRedaccionModo(modo) {
+      redaccionModo = modo;
+      const isRevisor = modo === "revisor";
+      document.getElementById("redaccion-toolbar-redactor").classList.toggle("hidden", isRevisor);
+      document.getElementById("redaccion-toolbar-revisor").classList.toggle("hidden", !isRevisor);
+      document.getElementById("redaccion-decision-panel").classList.toggle("hidden", !isRevisor);
+      document.getElementById("btn-add-segment").classList.toggle("hidden", isRevisor);
+      document.getElementById("section-select").disabled = isRevisor;
+      document.getElementById("section-editor-heading").classList.toggle("hidden", isRevisor);
+      document.getElementById("section-editor-help").textContent = isRevisor
+        ? "Segmentos enviados a revisión (solo lectura)."
+        : "Cada capítulo se redacta en segmentos numerados. Por segmento: un campo de texto libre y anexos vinculados con «Ver anexo».";
+      segmentsList.querySelectorAll(".segment-text").forEach((ta) => {
+        ta.readOnly = isRevisor;
+      });
+      segmentsList.querySelectorAll(".btn-segment-up, .btn-segment-down, .btn-segment-remove, .btn-link-annex").forEach((b) => {
+        b.classList.toggle("hidden", isRevisor);
+      });
+    }
+
+    document.getElementById("btn-redaccion-volver-revision").addEventListener("click", () => {
+      setRedaccionModo("redactor");
+      switchTab("revision");
     });
 
     const fileModal = document.getElementById("file-modal");
@@ -714,12 +1193,16 @@
       btn.addEventListener("click", () => {
         fileNameInput.value = btn.dataset.file || "";
         fileDescInput.value = btn.dataset.desc || "";
+        fileDescInput.disabled = detalleRol === "revisor";
+        document.getElementById("file-modal-cargador-actions").classList.toggle("hidden", detalleRol !== "cargador");
+        document.getElementById("file-modal-revisor-actions").classList.toggle("hidden", detalleRol !== "revisor");
         fileModal.classList.add("open");
       });
     });
 
     document.getElementById("btn-close-file-modal").addEventListener("click", () => {
       fileModal.classList.remove("open");
+      fileDescInput.disabled = false;
     });
 
     const DEPTOS_BY_REGION = {
@@ -796,29 +1279,15 @@
       alert(`Mock: evidencia subida — Región ${region}, ${depto}.`);
     });
 
-    const requestModal = document.getElementById("request-modal");
-    const requestStatus = document.getElementById("catalog-request-status");
-
-    document.getElementById("btn-open-request-modal").addEventListener("click", () => {
-      requestModal.classList.add("open");
-    });
-
-    document.getElementById("btn-close-request-modal").addEventListener("click", () => {
-      requestModal.classList.remove("open");
-    });
-
-    document.getElementById("btn-send-request").addEventListener("click", () => {
-      const proposal = document.getElementById("request-proposal").value.trim();
-      const reason = document.getElementById("request-reason").value.trim();
-      const err = document.getElementById("request-error");
-      if (!proposal || !reason) {
-        err.style.display = "block";
+    document.getElementById("btn-save-catalog").addEventListener("click", () => {
+      const text = document.getElementById("catalog-description").value.trim();
+      const status = document.getElementById("catalog-save-status");
+      if (!text) {
+        alert("La descripción de la ficha no puede quedar vacía.");
         return;
       }
-      err.style.display = "none";
-      requestModal.classList.remove("open");
-      requestStatus.classList.remove("hidden");
-      alert("Mock: solicitud enviada al administrador documental.");
+      status.classList.remove("hidden");
+      alert("Mock: ficha del anexo guardada.");
     });
 
     document.getElementById("btn-send-anexo-review").addEventListener("click", () => {

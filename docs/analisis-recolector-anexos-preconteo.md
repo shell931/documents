@@ -86,7 +86,7 @@ Lo anterior se infiere de los documentos y de haber visto carpetas vacías en di
 | R10 | MUST   | Si el sistema almacena datos personales (anexos 35, 48, 63), cumplir **Ley 1581/2012** y **Ley 1712/2014** y políticas RNEC que apliquen (marco legal general, no párrafo específico del informe Cap. VIII revisado).                                                                                                                                                                                |
 | R11 | SHOULD | Auditoría inmutable (append-only log) — coherente con que el proceso electoral es auditado (informe §10, resolución CNE 09458/2025 citada allí); el **formato técnico** del log del *recolector* es decisión de producto.                                                                                                                                                                            |
 | R12 | MAY    | Plantillas pre-llenadas de actas que se generen desde el sistema (reduce errores manuales).                                                                                                                                                                                                                                                                                                          |
-| R13 | MAY    | Dashboard de avance: % de anexos cerrados, próximos vencimientos por simulacro/evento.                                                                                                                                                                                                                                                                                                               |
+| R13 | MAY    | Dashboard de avance: % de anexos aprobados, próximos vencimientos por simulacro/evento.                                                                                                                                                                                                                                                                                                               |
 | R14 | MUST   | Exportación a ZIP final con la estructura de 70 carpetas para entrega contractual.                                                                                                                                                                                                                                                                                                                   |
 | R15 | MUST   | Gestionar la **construcción del informe PDF Cap. VIII** como salida del proceso: estado por capítulo/sección, redacción controlada y trazabilidad de cambios.                                                                                                                                                                                                                                      |
 | R16 | MUST   | Permitir bloques narrativos por sección (p. ej. “6. CAPACITACIÓN”), con texto editable, historial de versiones y responsable de edición.                                                                                                                                                                                                                                                            |
@@ -274,9 +274,9 @@ Incluir `manifest.json` con hashes y, si aplica, PDF de portada con índice firm
 
 | Rol | Responsabilidad principal | En el mock HTML (`mock-html/index.html`) |
 | --- | --- | --- |
-| **Cargador** | Construye cada anexo: checklist, sube evidencias (nivel 2), solicita ajustes de ficha vía admin si aplica, **envía el anexo a revisión** cuando corresponde. | Flujo **Abrir** desde **1) Dashboard** o **2) Anexos** → vista detalle (sin pestaña propia). |
+| **Cargador** | Construye cada anexo: sube evidencias (nivel 2), solicita ajustes de ficha vía admin si aplica, **envía el anexo a revisión** cuando corresponde. | Flujo **Abrir** desde **1) Anexos** → vista detalle (sin pestaña propia). |
 | **Revisor** | Atiende la **cola de revisión**: abre el anexo, verifica ficha + archivos + trazabilidad, **aprueba** o **devuelve** con observaciones. No sustituye al admin en cambios de catálogo. | Pestaña **6) Revisión** (estilo visual distinto en la barra superior para marcar otro rol). |
-| **Admin** | Catálogo de 70 anexos, reglas de exportación, estados de flujo, roles, checklists por anexo. | **7) Configuración** (tabla de parámetros y reglas documentales). |
+| **Admin** | Catálogo de 70 anexos, reglas de exportación, estados de flujo, roles (fuera del mock; vía backend o herramientas de operación). | Sin pestaña dedicada en el mock actual. |
 
 **Nota:** En el prototipo estático no hay login: cualquier lector puede entrar a todas las pestañas; en producto se restringiría **6) Revisión** (y acciones de aprobación) a perfiles **revisor** / **admin**.
 
@@ -298,14 +298,14 @@ Total **33** territorios (32 departamentos + Bogotá D.C.). Cada departamento pe
 - El **catálogo 01–70** no se duplica por departamento: sigue habiendo **un solo Anexo 02**, **un solo Anexo 28**, etc.
 - Durante la operación, **varios departamentos** (y las dos regiones) **suben evidencias** al **mismo** `anexo_id`, cada carga etiquetada con **región + departamento** (+ evento, descripción nivel 2).
 - Un **usuario** puede estar habilitado para **varios departamentos** (incluso de distintas regiones si aplica); en **cada subida** elige región y departamento.
-- Al cierre del hito, el sistema o el consolidador arma **un único entregable del anexo** (carpeta `02. …` en el ZIP, documento merge, o paquete acordado), no 33 anexos distintos del mismo número.
+- Al exportar el ZIP, el processing **consolida automáticamente** las evidencias aprobadas en **un único entregable por carpeta** `NN. …` (no es un paso manual en UI).
 
 ```text
 Anexo 02 (único en catálogo)
   ├── carga — Valle (TPS)
   ├── carga — Antioquia (ASD)
   ├── carga — Cundinamarca (TPS)
-  └── … → revisión regional → consolidado del anexo 02 → ZIP nacional 01..70
+  └── … → revisión → aprobado → Export ZIP arma carpeta 02 en el paquete 01..70
 ```
 
 #### Validaciones en carga (producto)
@@ -342,7 +342,7 @@ Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito 
 #### En el mock HTML
 
 - Modal **Subir evidencia**: selectores **1) Región** → **2) Departamento** (lista filtrada) antes del archivo.
-- Detalle de anexo: tabla de archivos con columnas Región / Departamento; bloques **Evidencias por departamento** y **Consolidado del anexo**.
+- Detalle de anexo: tabla de archivos con columnas Región / Departamento; bloque **Evidencias por departamento**.
 
 ### Módulo 1 — Dashboard de 70 anexos
 
@@ -353,13 +353,13 @@ Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito 
 | Filtros: [Estado v] [Sede v] [Familia v] [Buscar anexo.........................]    |
 +--------------------------------------------------------------------------------------+
 | #  | Nombre Anexo                                            | Estado     | Evidencias|
-| 01 | Acta de aprobación CRT - OSD                            | Cerrado    | 3         |
+| 01 | Acta de aprobación CRT - OSD                            | Aprobado   | 3         |
 | 02 | Acta de verificación de implementación CRT - OSD        | Revisión   | 2         |
 | 03 | Acta de verificación de implementación Sala de Prensa   | Pendiente  | 0         |
 | .. | ...                                                     | ...        | ...       |
 | 70 | Licenciamiento de la BD transaccional y componentes HW  | Construcción| 1        |
 +--------------------------------------------------------------------------------------+
-| Progreso global: 32/70 cerrados (45.7%)         [Exportar paquete 01..70]           |
+| Progreso global: 32/70 aprobados (45.7%)         [Exportar paquete 01..70]           |
 +--------------------------------------------------------------------------------------+
 ```
 
@@ -368,17 +368,12 @@ Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito 
 ```text
 +--------------------------------------------------------------------------------------+
 | Anexo 02 — Acta de verificación implementación CRT - OSD                             |
-| Estado: En construcción      Evento: Simulacro I                                     |
+| Estado: En proceso           Evento: Simulacro I                                     |
 +--------------------------------------------------------------------------------------+
 | Evidencias por departamento (avance del mismo anexo):                                |
 |  Región TPS | Valle        | 1 archivo  | OK                                        |
 |  Región ASD | Antioquia    | 1 archivo  | OK                                        |
 |  Región TPS | Cundinamarca | 0 archivos  | Pendiente                                |
-+--------------------------------------------------------------------------------------+
-| Consolidado del anexo 02: [Pendiente] — se genera al cerrar regiones / nacional      |
-+--------------------------------------------------------------------------------------+
-| Checklist operativo (editable por configuración):                                    |
-| [x] Acta firmada   [ ] Anexo referencia CRT   ...                                    |
 +--------------------------------------------------------------------------------------+
 | Archivos cargados                                                                   |
 | Archivo              | Región | Departamento  | Descripción (nivel 2) | Quién | Fecha |
@@ -412,8 +407,8 @@ Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito 
 | Validaciones previas:                                                                  |
 | [x] Estructura 01..70 completa                                                        |
 | [x] Nombres de carpeta oficiales                                                      |
-| [x] Anexos cerrados incluidos                                                         |
-| [!] 5 anexos siguen en estado "En construcción" (opcional incluir/excluir)           |
+| [x] Anexos aprobados incluidos                                                         |
+| [!] 5 anexos siguen en estado "En proceso" (opcional incluir/excluir)                |
 |                                                                                       |
 | [Generar ZIP]   ->  Anexos_Preconteo_Congreso_2026-02-12.zip                         |
 +--------------------------------------------------------------------------------------+
@@ -427,9 +422,9 @@ Anexos **centrales** (Casa Matriz, Data Center, consulados) pueden usar ámbito 
 +--------------------------------------------------------------------------------------+
 | - Catálogo de anexos (70) [bloqueado por defecto]                                    |
 | - Checklist por anexo [editable]                                                     |
-| - Estados de flujo [pendiente/construcción/revisión/cerrado]                         |
+| - Estados de flujo [pendiente/en proceso/revisión/aprobado]                         |
 | - Roles [cargador/revisor/admin]                                                     |
-| - Reglas de exportación [incluir solo cerrados / incluir todos]                      |
+| - Reglas de exportación [incluir solo aprobados / incluir todos]                      |
 +--------------------------------------------------------------------------------------+
 ```
 
@@ -479,15 +474,15 @@ No reemplaza un mock UI detallado (pixel-perfect). Para eso, usar Skywork/Figma 
 
 ```mermaid
 flowchart TD
-    A[Usuario carga evidencias] --> B[Anexo en construccion]
-    B --> C{Checklist completo?}
+    A[Usuario carga evidencias] --> B[Anexo en proceso]
+    B --> C{Requisitos minimos cumplidos?}
     C -- No --> B
     C -- Si --> D[Enviar a revision]
     D --> E{Revisor aprueba?}
     E -- No --> F[Devolver con observaciones]
     F --> B
-    E -- Si --> G[Anexo cerrado]
-    G --> H{Todos los anexos requeridos cerrados?}
+    E -- Si --> G[Anexo aprobado]
+    G --> H{Todos los anexos requeridos aprobados?}
     H -- No --> I[Continuar carga por anexos]
     I --> B
     H -- Si --> J[Exportar paquete 01..70]
@@ -505,7 +500,7 @@ flowchart TD
 ```mermaid
 flowchart LR
     D1[Dashboard 70 anexos<br/>filtros + progreso + exportar]
-    D2[Detalle de anexo<br/>checklist + archivos + trazabilidad]
+    D2[Detalle de anexo<br/>archivos + trazabilidad]
     D3[Cola de revision<br/>aprobar / devolver]
     D4[Exportacion<br/>validaciones + generar ZIP]
     D5[Configuracion<br/>checklist, roles, reglas]

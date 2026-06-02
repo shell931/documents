@@ -4,8 +4,8 @@ schema: spec-driven
 context: |
   Project: report-collector
   Status: Greenfield (workspace just created — no source code yet)
-  Tech stack: TBD (to be chosen during first /sdd-explore or /sdd-new)
-  Architecture: TBD
+  Tech stack: Angular (web), NestJS (api-gateway + processing), PostgreSQL, Prisma, Redis/BullMQ, MinIO/S3
+  Architecture: BFF/gateway + async processing microservice; see docs/arquitectura-implementacion.md
   Testing: None detected — initialize after picking the stack
   Style: None detected — adopt linter/formatter once stack is chosen
 
